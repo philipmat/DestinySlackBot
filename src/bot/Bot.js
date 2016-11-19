@@ -1,5 +1,6 @@
 import {slackbot} from 'botkit';
 import {CONFIG} from '../constants';
+import botCommands from './commands';
 
 import BotAction from './BotAction';
 
@@ -74,7 +75,7 @@ export default class Bot {
             console.log(`** The RTM api just closed`);
         });
 
-        _loadInteractions.call(this);
+        _loadBasicInteractions.call(this);
     }
 }
 
@@ -94,7 +95,7 @@ function _startWebServer() {
     });
 }
 
-function _loadInteractions() {
+function _loadBasicInteractions() {
     let controller = privateProps.get(this).controller;
 
     controller.hears('hello', 'direct_message', (bot, message) => {
@@ -104,5 +105,9 @@ function _loadInteractions() {
     controller.hears('^stop', 'direct_message', (bot, message) => {
         bot.reply(message, 'Goodbye');
         bot.rtm.close();
+    });
+
+    controller.hears(botCommands.help.commands, botCommands.help.respondsTo, (bot, message) => {
+        botCommands.help.action(bot, message, this.getActions());
     });
 }

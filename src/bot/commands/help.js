@@ -1,12 +1,11 @@
 let command = ['help', 'commands'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
-    description = 'Provides information on all of the supported commands',
-    _actions = [];
+    description = 'Provides information on all of the supported commands';
 
-function action(bot, message) {
+function action(bot, message, actions) {
     let response = [];
 
-    _actions.forEach(action => {
+    actions.forEach(action => {
         let commands = action.command.reduce((output, current) => {
             output.push(`\`${current}${action.requiresGamerTag() ? ' gamertag' : ''}\``);
             return output;
@@ -18,11 +17,8 @@ function action(bot, message) {
     bot.reply(response.join('\n'));
 }
 
-export default function help(actions) {
-    _actions = actions;
-    return {
-        command,
-        respondsTo,
-        action
-    }
+export default {
+    command,
+    respondsTo,
+    action
 }
