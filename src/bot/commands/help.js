@@ -20,5 +20,6 @@ function action(bot, message, actions) {
 export default {
     command,
     respondsTo,
-    action
+    action,
+    description
 }
