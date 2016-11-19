@@ -1,0 +1,25 @@
+{
+  "name": "TRBot",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./src/server",
+    "build": "babel src -d dist --source-maps && npm run copy",
+    "build-deploy": "babel src -d dist && npm run copy",
+    "copy": "cp package.json dist/package.json && cp src/app.config.json dist/app.config.json"
+  },
+  "dependencies": {
+    "api-request-base": "0.0.2",
+    "botkit": "latest",
+    "es6-promise": "^3.3.1",
+    "mrdandandan-destiny-api-module": "0.0.2",
+    "q": "^1.4.1",
+    "request-promise": "latest"
+  },
+  "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-cli": "^6.4.5",
+    "babel-core": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13"
+  }
+}
