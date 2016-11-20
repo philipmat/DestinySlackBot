@@ -8,7 +8,7 @@ let command     = ['trials archnemesis', 'trials arch nemesis'],
     requiresGamerTag = true;
 
 function action(bot, message) {
-    // Use this when playerId works for this call
+    // TODO: Use this when playerId works for this call
     // util.getPlayerId('mr dandandan')
     //     .then(_getArchNemesis)
 
