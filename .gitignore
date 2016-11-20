@@ -5,6 +5,3 @@ coverage/
 .idea/
 .tmp/
 dist/
-
-src/app.config.json
-src/twitch.config.json

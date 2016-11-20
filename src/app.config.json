@@ -1,0 +1,23 @@
+{
+  "APP": {
+    "PORT": 8001,
+
+    "BUNGIE": {
+      "API_KEY": ""
+    },
+    "GG" : {
+    },
+    "SLACK": {
+      "CLIENT_ID": "",
+      "CLIENT_SECRET": ""
+    },
+    "TRIALS_REPORT": {
+      "API_URL": "http://api.destinytrialsreport.com"
+    }
+  },
+  "SERVER": {
+    "ALLOWED_ORIGINS": [
+      "localhost:*"
+    ]
+  }
+}
