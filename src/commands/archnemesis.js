@@ -6,8 +6,11 @@ let command     = ['trials archnemesis', 'trials arch nemesis'],
     description = 'returns top 5 enemies played against more than once';
 
 function action(bot, message) {
-    util.getPlayerId('mr dandandan')
-        .then(_getArchNemesis)
+    // Use this when playerId works for this call
+    // util.getPlayerId('mr dandandan')
+    //     .then(_getArchNemesis)
+
+    _getArchNemesis({displayName: 'dandandan1503'})
         .then(_processArchNemesis)
         .catch(error => console.log(error.message));
 }

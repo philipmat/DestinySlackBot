@@ -6,21 +6,21 @@ const PARAMETERS = {
 
 export default {
     archnemesis: new DestinyTrialsReportApiRequest({
-        path: `archnemesis/${PARAMETERS.GAMER_TAG}`,
+        path: `archnemesis/{${PARAMETERS.GAMER_TAG}}`,
         routeBinding: `:${PARAMETERS.GAMER_TAG}`,
         requiredParameters: [
             PARAMETERS.GAMER_TAG
         ]
     }).buildRequest(),
     bestKd: new DestinyTrialsReportApiRequest({
-        path: `bestkd/${PARAMETERS.GAMER_TAG}`,
+        path: `bestkd/{${PARAMETERS.GAMER_TAG}}`,
         routeBinding: `:${PARAMETERS.GAMER_TAG}`,
         requiredParameters: [
             PARAMETERS.GAMER_TAG
         ]
     }).buildRequest(),
     worstKd: new DestinyTrialsReportApiRequest({
-        path: `worstKd/${PARAMETERS.GAMER_TAG}`,
+        path: `worstKd/{${PARAMETERS.GAMER_TAG}}`,
         routeBinding: `:${PARAMETERS.GAMER_TAG}`,
         requiredParameters: [
             PARAMETERS.GAMER_TAG

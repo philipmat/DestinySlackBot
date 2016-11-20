@@ -13,18 +13,19 @@ export default class DestinyTrialsReportApiRequest extends ApiRequest {
         this.setBaseUrl(CONFIG.TRIALS_REPORT.API_URL);
     }
 
-    buildRequest() {
-        let request = super.buildRequest();
-        let destinyTrialsReportRequest = function destinyTrialsReportRequest() {
-            return request(...arguments)
-                .then(unwrap)
-        }.bind(this);
-
-        return this.appendRequestMetadata(destinyTrialsReportRequest);
+    static unwrap(data) {
+        return data && data[0] ? data[0] : data;
     }
-}
-
-
-function unwrap(response) {
-    return response && response[0] ? response[0] : response;
+    //
+    // buildRequest() {
+    //     let request = super.buildRequest();
+    //     let destinyTrialsReportRequest = function destinyTrialsReportRequest() {
+    //         return request(...arguments)
+    //             .then(response => {
+    //                 console.log(response);
+    //             })
+    //     }.bind(this);
+    //
+    //     return this.appendRequestMetadata(destinyTrialsReportRequest);
+    // }
 }

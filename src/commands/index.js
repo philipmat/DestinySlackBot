@@ -6,4 +6,6 @@ export default [
     archnemesis
 ]
 
+// Random invocation for testing things
+currentMap.action();
 archnemesis.action();

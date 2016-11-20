@@ -1,4 +1,5 @@
 import api from '../destinytrialsreport-api-module';
+import {DestinyTrialsReportApiRequest} from '../destinytrialsreport-api-module';
 
 let command     = ['currentmap', 'trials map'],
     respondsTo  = ['direct_message', 'direct_mention', 'mention'],
@@ -6,6 +7,7 @@ let command     = ['currentmap', 'trials map'],
 
 function action(bot, message) {
     api.general.currentMap()
+        .then(DestinyTrialsReportApiRequest.unwrap)
         .then(result => {
             if(!result) {
                 return;

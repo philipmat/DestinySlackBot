@@ -9,7 +9,7 @@ let endpoints = {};
 function generateRequests(requestMetaInfo) {
     requestMetaInfo.forEach(info => {
         endpoints[info.name] = new DestinyTrialsReportApiRequest({
-            path: `${info.basePath}/${PARAMETERS.GAMER_TAG}`,
+            path: `${info.basePath}/{${PARAMETERS.GAMER_TAG}}`,
             routeBinding: `:${PARAMETERS.GAMER_TAG}`,
             requiredParameters: [
                 PARAMETERS.GAMER_TAG
