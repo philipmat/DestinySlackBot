@@ -1,5 +1,6 @@
+import {CONFIG} from '../constants';
 import {DestinyApiRequest} from 'mrdandandan-destiny-api-module';
-DestinyApiRequest.setApiKey('e675d08bc41146c19819468a674512ed');
+DestinyApiRequest.setApiKey(CONFIG.BUNGIE.API_KEY);
 
 import getPlayerId from './getPlayerId';
 import searchDestinyPlayer from'./searchDestinyPlayer';
