@@ -33,7 +33,7 @@ function _processArchNemesis(results) {
         response,
         attachments;
 
-    let title = `${player.displayName}'s top ${nemeses.length} nemeses`;
+    let title = `*<http://opponents.trials.report/${util.membershipTypeToPlatform(player.membershipType)}/${player.displayName}|${player.displayName}'s top ${nemeses.length} nemeses>*`;
 
     if (!results.nemeses || !results.nemeses.length) {
         attachments = [util.formatSlackAttachment({
@@ -44,11 +44,12 @@ function _processArchNemesis(results) {
             title: `${nemesis.displayName}`,
             title_link: `http://my.trials.report/${util.membershipTypeToPlatform(nemesis.membershipType)}/${nemesis.displayName}`,
             text:  `${nemesis.count} match${nemesis.count !== 1 ? 'es' : ''}`,
-            fallback: title
+            fallback: `${nemesis.displayName}: ${nemesis.count} match${nemesis.count !== 1 ? 'es' : ''}`
         }));
     }
 
     response = util.formatSlackResponse({
+        text: title,
         attachments
     });
 

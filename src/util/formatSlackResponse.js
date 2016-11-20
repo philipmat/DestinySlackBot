@@ -3,10 +3,11 @@ const DEFAULT_USER_ICON = 'https://avatars.slack-edge.com/2016-03-04/24531630918
 
 export default formatSlackResponse;
 
-function formatSlackResponse({userName = DEFAULT_USER_NAME, iconUrl = DEFAULT_USER_ICON, attachments = []}) {
+function formatSlackResponse({text = '', userName = DEFAULT_USER_NAME, iconUrl = DEFAULT_USER_ICON, attachments = []}) {
     return {
         username: userName,
         icon_url: iconUrl,
-        attachments: attachments
+        attachments: attachments,
+        text
     }
 }
