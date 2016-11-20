@@ -1,13 +1,23 @@
 import {CONFIG} from './constants';
 import {DestinyApiRequest} from 'mrdandandan-destiny-api-module';
 import Bot from './bot/Bot';
-import commands from './commands';
+import actions from './commands';
 
 DestinyApiRequest.setApiKey(CONFIG.BUNGIE.API_KEY);
 
 let slackbot = new Bot();
-//slackbot.start();
+console.log('Bot Instantiated');
 
-commands.forEach(command => {
-    slackbot.registerAction(command.command, command.respondsTo, command.action, command.description);
+// TODO: When we actually want to start the bot
+//slackbot.start();
+console.log('Bot Started');
+
+actions.forEach(action => {
+    slackbot.registerAction(action);
 });
+console.log('Commands Loaded');
+
+console.log('Done');
+
+slackbot.helpAction({}, {});
+console.log('Help Action Invoked');

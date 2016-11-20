@@ -2,8 +2,6 @@ import {slackbot} from 'botkit';
 import {CONFIG} from '../constants';
 import botCommands from './commands';
 
-import BotAction from './BotAction';
-
 let privateProps = new WeakMap();
 
 export default class Bot {
@@ -12,11 +10,13 @@ export default class Bot {
             json_file_store: './db_slackbutton_bot/',
             interactive_replies: true
         });
-        controller.configureSlackApp({
-            clientId: CONFIG.SLACK.CLIENT_ID,
-            clientSecret: CONFIG.SLACK.CLIENT_SECRET,
-            scopes: ['bot']
-        });
+
+        // TODO: Uncomment when oath and whatnot is ready to play with
+        // controller.configureSlackApp({
+        //     clientId: CONFIG.SLACK.CLIENT_ID,
+        //     clientSecret: CONFIG.SLACK.CLIENT_SECRET,
+        //     scopes: ['bot']
+        // });
 
         privateProps.set(this, {
             controller,
@@ -33,13 +33,17 @@ export default class Bot {
         return privateProps.get(this).controller;
     }
 
-    registerAction(command, respondsTo, action, description, args) {
-        let botAction = new BotAction(...arguments);
+    registerAction(action) {
         let controller = privateProps.get(this).controller,
             actions = privateProps.get(this).actions;
 
-        actions.push(botAction);
-        controller.hears(botAction.getCommands(), botAction.respondsTo(), botAction.action());
+        actions.push(action);
+        controller.hears(action.getCommand(), action.getRespondsTo(), action.invoke());
+    }
+
+    // TODO: Remove this later.  Used for testing stuff atm
+    helpAction(bot, message) {
+        botCommands.help.invoke(bot, message, this.getActions());
     }
 
     start() {
@@ -107,7 +111,7 @@ function _loadBasicInteractions() {
         bot.rtm.close();
     });
 
-    controller.hears(botCommands.help.commands, botCommands.help.respondsTo, (bot, message) => {
-        botCommands.help.action(bot, message, this.getActions());
+    controller.hears(botCommands.help.getCommand(), botCommands.help.getRespondsTo(), (bot, message) => {
+        botCommands.help.invoke(bot, message, this.getActions());
     });
 }

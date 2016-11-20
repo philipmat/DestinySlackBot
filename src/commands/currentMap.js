@@ -1,5 +1,6 @@
 import api from '../destinytrialsreport-api-module';
 import {DestinyTrialsReportApiRequest} from '../destinytrialsreport-api-module';
+import BotAction from '../bot/BotAction';
 
 let command     = ['currentmap', 'trials map'],
     respondsTo  = ['direct_message', 'direct_mention', 'mention'],
@@ -32,9 +33,9 @@ function action(bot, message) {
         });
 }
 
-export default {
+export default new BotAction(
     command,
     respondsTo,
     action,
     description
-}
+)

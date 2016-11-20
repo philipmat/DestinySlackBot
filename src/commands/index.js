@@ -7,5 +7,5 @@ export default [
 ]
 
 // Random invocation for testing things
-currentMap.action();
-archnemesis.action();
+currentMap.invoke();
+archnemesis.invoke();
