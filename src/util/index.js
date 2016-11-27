@@ -7,6 +7,7 @@ import formatSlackAttachment from'./formatSlackAttachment';
 import formatSlackResponse from'./formatSlackResponse';
 import getPlayerId from './getPlayerId';
 import searchDestinyPlayer from'./searchDestinyPlayer';
+import getName from'./getName';
 
 
 export default {
@@ -14,5 +15,6 @@ export default {
     formatSlackAttachment,
     formatSlackResponse,
     getPlayerId,
-    searchDestinyPlayer
+    searchDestinyPlayer,
+    getName
 }

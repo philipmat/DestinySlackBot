@@ -10,18 +10,13 @@ function getPlayerId(displayName, membershipType) {
         return util.searchDestinyPlayer(membershipType, displayName);
     }
 
-    return Promise.all([
-        util.searchDestinyPlayer(1, displayName),
-        util.searchDestinyPlayer(2, displayName)
-    ]).then(results => {
-        if(results[0] && results[1]) {
+    return util.searchDestinyPlayer(-1, displayName).then(results => {
+        if (results.length > 1) {
             return Promise.reject(new Error(`Match for ${displayName} found for multiple platforms`));
-        } else if(results[0]) {
-            return results[0];
-        } else if (results[1]) {
-            return results[1];
-        } else {
+        } else if(results.length === 0) {
             return Promise.reject(new Error(`Match for ${displayName} not found on either platform`));
+        } else {
+            return results[0];
         }
     });
 }

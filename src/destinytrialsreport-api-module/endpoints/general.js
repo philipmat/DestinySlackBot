@@ -1,15 +1,16 @@
 import DestinyTrialsReportApiRequest from '../DestinyTrialsReportApiRequest';
 
 const PARAMETERS = {
-    GAMER_TAG: 'gamerTag'
+    GAMER_TAG: 'gamerTag',
+    MEMBERSHIP_ID: 'membershipId'
 };
 
 export default {
     archnemesis: new DestinyTrialsReportApiRequest({
-        path: `archnemesis/{${PARAMETERS.GAMER_TAG}}`,
-        routeBinding: `:${PARAMETERS.GAMER_TAG}`,
+        path: `slack/archnemesis/{${PARAMETERS.MEMBERSHIP_ID}}`,
+        routeBinding: `:${PARAMETERS.MEMBERSHIP_ID}`,
         requiredParameters: [
-            PARAMETERS.GAMER_TAG
+            PARAMETERS.MEMBERSHIP_ID
         ]
     }).buildRequest(),
     bestKd: new DestinyTrialsReportApiRequest({

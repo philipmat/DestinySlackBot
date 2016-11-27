@@ -7,16 +7,15 @@ let privateProps = new WeakMap();
 export default class Bot {
     constructor() {
         let controller = slackbot({
-            json_file_store: './db_slackbutton_bot/',
-            interactive_replies: true
+            json_file_store: './db_slackbutton_bot/'
         });
 
         // TODO: Uncomment when oath and whatnot is ready to play with
-        // controller.configureSlackApp({
-        //     clientId: CONFIG.SLACK.CLIENT_ID,
-        //     clientSecret: CONFIG.SLACK.CLIENT_SECRET,
-        //     scopes: ['bot']
-        // });
+        controller.configureSlackApp({
+            clientId: CONFIG.SLACK.CLIENT_ID,
+            clientSecret: CONFIG.SLACK.CLIENT_SECRET,
+            scopes: ['bot']
+        });
 
         privateProps.set(this, {
             controller,
@@ -50,14 +49,14 @@ export default class Bot {
         let controller = privateProps.get(this).controller,
             bots = privateProps.get(this).bots;
 
-        _startWebServer().call(this);
+        _startWebServer.call(this);
         controller.on('create_bot', (bot, config) => {
             if(bots[bot.config.token]) {
                 return;
             }
             bot.startRTM(err => {
                 if(!err) {
-                    bots[bot.config.token] = bot;
+                    _trackBot(bot, bots);
                 }
 
                 bot.startPrivateConversation({user: config.createdBy}, (err, convo) => {
@@ -80,7 +79,12 @@ export default class Bot {
         });
 
         _loadBasicInteractions.call(this);
+        _connectExistingTeams.call(this);
     }
+}
+
+function _trackBot(bot, bots) {
+    bots[bot.config.token] = bot;
 }
 
 function _startWebServer() {
@@ -113,5 +117,31 @@ function _loadBasicInteractions() {
 
     controller.hears(botCommands.help.getCommand(), botCommands.help.getRespondsTo(), (bot, message) => {
         botCommands.help.invoke(bot, message, this.getActions());
+    });
+}
+
+function _connectExistingTeams() {
+    let controller = privateProps.get(this).controller,
+        bots = privateProps.get(this).bots;
+
+    controller.storage.teams.all(function(err,teams) {
+
+        if (err) {
+            throw new Error(err);
+        }
+
+        // connect all teams with bots up to slack!
+        for (var t  in teams) {
+            if (teams[t].bot) {
+                controller.spawn(teams[t]).startRTM(function(err, bot) {
+                    if (err) {
+                        console.log('Error connecting bot to Slack:',err);
+                    } else {
+                        _trackBot(bot, bots);
+                    }
+                });
+            }
+        }
+
     });
 }

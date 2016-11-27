@@ -8,18 +8,17 @@ let command = ['trials archnemesis', 'trials arch nemesis'],
     requiresGamerTag = true;
 
 function action(bot, message) {
-    // TODO: Use this when playerId works for this call
-    // util.getPlayerId('mr dandandan')
-    //     .then(_getArchNemesis)
+    let gamertag = util.getName(message);
 
-    _getArchNemesis({displayName: 'dandandan1503', membershipType: 1})
+    util.getPlayerId(gamertag)
+        .then(_getArchNemesis)
         .then(_processArchNemesis)
         .catch(error => console.log(error.message));
 }
 
 function _getArchNemesis(player) {
     return api.general.archnemesis({
-        gamerTag: player.displayName
+        membershipId: player.membershipId
     }).then(results => {
         return {
             nemeses: results,

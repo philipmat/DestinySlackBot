@@ -9,7 +9,7 @@ let slackbot = new Bot();
 console.log('Bot Instantiated');
 
 // TODO: When we actually want to start the bot
-//slackbot.start();
+slackbot.start();
 console.log('Bot Started');
 
 actions.forEach(action => {
