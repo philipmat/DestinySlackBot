@@ -1,11 +1,19 @@
 import currentMap from './currentMap';
 import archnemesis from './archnemesis';
+import lastWeek from './lastWeek';
 
 export default [
+    archnemesis,
     currentMap,
-    archnemesis
+    lastWeek
 ]
 
 // Random invocation for testing things
-// currentMap.invoke();
-// archnemesis.invoke();
+//let message = {
+//    text: 'ceratedstew',
+//    match: ['']
+//};
+
+//currentMap.invoke(undefined, message);
+//archnemesis.invoke(undefined, message);
+//lastWeek.invoke(undefined, message);

@@ -16,8 +16,8 @@ function action(bot, message, actions) {
     });
     response.push('_For any questions email destinytrialsreport@gmail.com_');
 
+    bot.reply(message, response.join('\n'));
     return response;
-    //bot.reply(response.join('\n'));
 }
 
 export default new BotAction (

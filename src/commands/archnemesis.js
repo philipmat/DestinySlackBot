@@ -4,15 +4,15 @@ import BotAction from '../bot/BotAction';
 
 let command = ['trials archnemesis', 'trials arch nemesis'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
-    description = 'returns top 5 enemies played against more than once',
+    description = 'returns top 5 enemies played against more than once.',
     requiresGamerTag = true;
 
 function action(bot, message) {
-    let gamertag = util.getName(message);
-
-    util.getPlayerId(gamertag)
+    util.getName(message)
+        .then(util.getPlayerId)
         .then(_getArchNemesis)
         .then(_processArchNemesis)
+        .then(response => bot.reply(message, response))
         .catch(error => console.log(error.message));
 }
 
@@ -36,7 +36,7 @@ function _processArchNemesis(results) {
 
     if (!results.nemeses || !results.nemeses.length) {
         attachments = [util.formatSlackAttachment({
-            text: `No archnemeses found`
+            text: `No archnemeses found for ${player.displayName}`
         })];
     } else {
         attachments = nemeses.map(nemesis => util.formatSlackAttachment({
@@ -52,7 +52,7 @@ function _processArchNemesis(results) {
         attachments
     });
 
-    console.log(response)
+    return response;
 }
 
 export default new BotAction(

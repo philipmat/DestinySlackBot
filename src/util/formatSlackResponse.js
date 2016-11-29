@@ -7,7 +7,7 @@ function formatSlackResponse({text = '', userName = DEFAULT_USER_NAME, iconUrl =
     return {
         username: userName,
         icon_url: iconUrl,
-        attachments: attachments,
+        attachments: attachments instanceof Array ? attachments : [attachments],
         text
     }
 }

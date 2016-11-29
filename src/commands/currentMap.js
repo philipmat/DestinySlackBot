@@ -7,30 +7,38 @@ let command     = ['currentmap', 'trials map'],
     description = 'returns the most recent trials map';
 
 function action(bot, message) {
-    api.general.currentMap()
+    _getCurrentMap()
         .then(DestinyTrialsReportApiRequest.unwrap)
-        .then(result => {
-            if(!result) {
-                return;
+        .then(_processCurrentMapResponse)
+        .then(response => bot.reply(message, response))
+        .catch(error => console.log(error));
+}
+
+function _getCurrentMap() {
+    return api.general.currentMap();
+}
+
+function _processCurrentMapResponse(result) {
+    if(!result) {
+        return Promise.reject(`Invalid response for currentMap request`);
+    }
+
+    let mapName = result['activityName'],
+        pgcrImage = result['pgcrImage'];
+
+    let response = {
+        text: `This week's map is...`,
+        attachments: [
+            {
+                fallback: mapName,
+                text: mapName,
+                image_url: `http://www.bungie.net${pgcrImage}`
             }
+        ]
+    };
 
-            let mapName = result['activityName'],
-                pgcrImage = result['pgcrImage'];
-
-            let response = {
-                text: `This week's map is...`,
-                attachments: [
-                    {
-                        fallback: mapName,
-                        text: mapName,
-                        image_url: `http://www.bungie.net${pgcrImage}`
-                    }
-                ]
-            };
-
-            console.log(response);
-            //bot.reply(message, response);
-        });
+    return response;
+    //bot.reply(message, response);
 }
 
 export default new BotAction(

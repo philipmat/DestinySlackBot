@@ -7,5 +7,5 @@ function getName(message) {
         name = message.text.replace(message.match[0], '').trim();
     }
 
-    return name;
+    return Promise.resolve(name);
 }
