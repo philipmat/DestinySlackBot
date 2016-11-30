@@ -35,11 +35,11 @@ function _processArchNemesis(results) {
     let title = `*<http://opponents.trials.report/${util.Convert.membershipTypeToPlatform(player.membershipType)}/${player.displayName}|${player.displayName}'s top ${nemeses.length} nemeses>*`;
 
     if (!results.nemeses || !results.nemeses.length) {
-        attachments = [util.formatSlackAttachment({
+        attachments = [util.slack.formatAttachment({
             text: `No archnemeses found for ${player.displayName}`
         })];
     } else {
-        attachments = nemeses.map(nemesis => util.formatSlackAttachment({
+        attachments = nemeses.map(nemesis => util.slack.formatAttachment({
             title: `${nemesis.displayName}`,
             title_link: `http://my.trials.report/${util.Convert.membershipTypeToPlatform(nemesis.membershipType)}/${nemesis.displayName}`,
             text:  `${nemesis.count} match${nemesis.count !== 1 ? 'es' : ''}`,
@@ -47,7 +47,7 @@ function _processArchNemesis(results) {
         }));
     }
 
-    response = util.formatSlackResponse({
+    response = util.slack.formatResponse({
         text: title,
         attachments
     });

@@ -1,8 +1,8 @@
-import util from './index';
+import util from '../index';
 
-export default aggregateMatchStatsToSlackFields;
+export default aggregateMatchStatsToFields;
 
-function aggregateMatchStatsToSlackFields (heading, subHeading, matches, losses, kd) {
+function aggregateMatchStatsToFields (heading, subHeading, matches, losses, kd) {
         let winPercent = util.Convert.toRoundedValue(100 * (matches - losses) / matches, 2),
         winCount = matches - losses;
 
