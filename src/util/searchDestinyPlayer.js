@@ -7,7 +7,6 @@ function searchDestinyPlayer(membershipType, displayName) {
         membershipType,
         displayName
     }).then(response => {
-        console.log(response);
         return response;
     });
 }

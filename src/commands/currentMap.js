@@ -38,7 +38,6 @@ function _processCurrentMapResponse(result) {
     };
 
     return response;
-    //bot.reply(message, response);
 }
 
 export default new BotAction(
