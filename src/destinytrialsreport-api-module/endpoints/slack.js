@@ -2,7 +2,8 @@ import DestinyTrialsReportApiRequest from '../DestinyTrialsReportApiRequest';
 
 const PARAMETERS = {
     GAMER_TAG: 'gamerTag',
-    WEEK: 'week'
+    WEEK_NUMBER: 'weekNumber',
+    MEMBERSHIP_ID: 'membershipId'
 };
 
 export default {
@@ -49,10 +50,11 @@ export default {
         ]
     }).buildRequest(),
     trialsWeek: new DestinyTrialsReportApiRequest({
-        path: `slack/trials/{${PARAMETERS.GAMER_TAG}}/week/{${PARAMETERS.WEEK}}`,
-        routeBinding: `:${PARAMETERS.GAMER_TAG}/:${PARAMETERS.WEEK}`,
+        path: `slack/trials/week/{${PARAMETERS.MEMBERSHIP_ID}}/{${PARAMETERS.WEEK_NUMBER}}`,
+        routeBinding: `:${PARAMETERS.MEMBERSHIP_ID}/:${PARAMETERS.WEEK_NUMBER}`,
         requiredParameters: [
-            PARAMETERS.GAMER_TAG
+            PARAMETERS.MEMBERSHIP_ID,
+            PARAMETERS.WEEK_NUMBER
         ]
     }).buildRequest(),
 };

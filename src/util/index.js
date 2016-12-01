@@ -5,13 +5,15 @@ DestinyApiRequest.setApiKey(CONFIG.BUNGIE.API_KEY);
 import Convert from './convert';
 import getName from'./getName';
 import getPlayerId from './getPlayerId';
+import parseMessage from './parseMessage';
 import searchDestinyPlayer from'./searchDestinyPlayer';
 import slack from './slack';
 
 export default {
     Convert,
-    getPlayerId,
-    searchDestinyPlayer,
     getName,
+    getPlayerId,
+    parseMessage,
+    searchDestinyPlayer,
     slack
 }

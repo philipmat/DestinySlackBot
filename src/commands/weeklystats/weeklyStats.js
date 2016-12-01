@@ -1,10 +1,10 @@
-import api from '../destinytrialsreport-api-module';
-import {DestinyTrialsReportApiRequest} from '../destinytrialsreport-api-module';
-import util from '../util';
+import api from '../../destinytrialsreport-api-module';
+import {DestinyTrialsReportApiRequest} from '../../destinytrialsreport-api-module';
+import util from '../../util';
 
 const WEEK = {
-    CURRENT: 'current',
-    PREVIOUS: 'previous'
+    CURRENT: 0,
+    PREVIOUS: -1
 };
 
 export default getWeeklyStats;
@@ -13,37 +13,21 @@ export {
 };
 
 function getWeeklyStats(week, gamerTag) {
-    //util.getPlayerId(gamerTag)
-    let request;
-    switch(week) {
-        case WEEK.CURRENT:
-            request = _getWeeklyStats('thisWeek', gamerTag);
-            break;
-        case WEEK.PREVIOUS:
-            request = _getWeeklyStats('lastWeek', gamerTag);
-            break;
-        default:
-            let weekNumber = +week;
-            if(!weekNumber) {
-                return `${week} is not a valid number for week`;
-            }
-            request = _getSpecificWeeklyStats(weekNumber, gamerTag);
-            break;
+    let weekNumber = +week;
+    if (isNaN(weekNumber) || weekNumber < -1 /* || weekNumber > MAX_WEEK_NUMBER*/) {
+        return `${week} is not a valid number for week`;
     }
 
-    return request
+    return util.getPlayerId(gamerTag)
+        .then(player => _getSpecificWeeklyStats(weekNumber, player))
         .then(_processWeeklyStats)
         .catch(error => console.log(error.message));
 }
 
-function _getSpecificWeeklyStats(weekNumber, gamerTag) {
-    return Promise.resolve();
-}
-
-function _getWeeklyStats(endpoint, player) {
-    return api.slack[endpoint]({
-        //membershipId: player.membershipId
-        gamerTag: player
+function _getSpecificWeeklyStats(weekNumber, player) {
+    return api.slack.trialsWeek({
+        membershipId: player.membershipId,
+        weekNumber
     })
         .then(DestinyTrialsReportApiRequest.unwrap)
         .then(response => {
