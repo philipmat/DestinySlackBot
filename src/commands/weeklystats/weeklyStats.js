@@ -20,20 +20,12 @@ function getWeeklyStats(week, command) {
 
     return util.getPlayerId(command.gamerTag, command.membershipType, command.command)
         .then(player => _getSpecificWeeklyStats(weekNumber, player))
-        .then(_processWeeklyStats)
-        // .catch(error => console.log(error.message));
-        .catch(error => {
-            if (error.attachments) {
-                return error;
-            } else {
-                return console.log(error.message);
-            }
-        });
+        .then(_processWeeklyStats);
 }
 
 function _getSpecificWeeklyStats(weekNumber, player) {
     return api.slack.trialsWeek({
-        membershipId: player.shift().membershipId,
+        membershipId: player.membershipId,
         weekNumber
     })
         .then(DestinyTrialsReportApiRequest.unwrap)
@@ -52,8 +44,8 @@ function _processWeeklyStats(results) {
         return `No matches found for ${player.displayName || player}`;
     }
     let platform  = util.Convert.membershipTypeToPlatform(stats.membershipType),
-        title     = `${stats.displayName} on DestinyTrialsReport`,
-        titleLink = `http://my.trials.report/${platform}/${stats.displayName}`;
+        title     = `${player.displayName} on DestinyTrialsReport`,
+        titleLink = `http://my.trials.report/${platform}/${player.displayName}`;
 
     let aggregateFields = util.slack.aggregateMatchStatsToFields(`Map`, stats.map, +stats.matches, +stats.losses, +stats.kd);
 

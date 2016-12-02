@@ -34,7 +34,7 @@ export default class Bot {
 
     registerAction(action) {
         let controller = privateProps.get(this).controller,
-            actions = privateProps.get(this).actions;
+            actions    = privateProps.get(this).actions;
 
         actions.push(action);
         controller.hears(action.getCommand(), action.getRespondsTo(), action.invoke.bind(action));
@@ -47,35 +47,20 @@ export default class Bot {
 
     start() {
         let controller = privateProps.get(this).controller,
-            bots = privateProps.get(this).bots;
-
-        controller.on('interactive_message_callback', (bot, message) => {
-
-            var action = message.actions[0];
-            var id = message.callback_id;
-
-            // replyInteractive replaces the interactive response
-            // bot.replyInteractive(message, reply);
-            bot.reply({
-                type: 'message',
-                text: action.value
-            }, (err, convo) => {
-            });
-        });
-
+            bots       = privateProps.get(this).bots;
 
         _startWebServer.call(this);
         controller.on('create_bot', (bot, config) => {
-            if(bots[bot.config.token]) {
+            if (bots[bot.config.token]) {
                 return;
             }
             bot.startRTM(err => {
-                if(!err) {
+                if (!err) {
                     _trackBot(bot, bots);
                 }
 
                 bot.startPrivateConversation({user: config.createdBy}, (err, convo) => {
-                    if(err) {
+                    if (err) {
                         console.log(err);
                     } else {
                         convo.say(`I am a bot that has just joined your team`);
@@ -109,7 +94,7 @@ function _startWebServer() {
         controller.createWebhookEndpoints(controller.webserver);
 
         controller.createOauthEndpoints(controller.webserver, (err, req, res) => {
-            if(err) {
+            if (err) {
                 res.status(500).send(`Error: ${err}`);
             } else {
                 res.send(`Success!`);
@@ -130,6 +115,24 @@ function _loadBasicInteractions() {
         bot.rtm.close();
     });
 
+    controller.on('interactive_message_callback', (bot, message) => {
+        let action = this.getActions().find(a => {
+            return a.getCommand().includes(message.callback_id);
+        });
+
+        action.invoke(bot, message);
+        //var action = message.actions[0];
+        //var id = message.callback_id;
+
+        // replyInteractive replaces the interactive response
+        // bot.replyInteractive(message, reply);
+        //bot.reply({
+        //    type: 'message',
+        //    text: action.value
+        //}, (err, convo) => {
+        //});
+    });
+
     controller.hears(botCommands.help.getCommand(), botCommands.help.getRespondsTo(), (bot, message) => {
         botCommands.help.invoke(bot, message, this.getActions());
     });
@@ -137,9 +140,9 @@ function _loadBasicInteractions() {
 
 function _connectExistingTeams() {
     let controller = privateProps.get(this).controller,
-        bots = privateProps.get(this).bots;
+        bots       = privateProps.get(this).bots;
 
-    controller.storage.teams.all(function(err,teams) {
+    controller.storage.teams.all(function (err, teams) {
 
         if (err) {
             throw new Error(err);
@@ -148,9 +151,9 @@ function _connectExistingTeams() {
         // connect all teams with bots up to slack!
         for (var t  in teams) {
             if (teams[t].bot) {
-                controller.spawn(teams[t]).startRTM(function(err, bot) {
+                controller.spawn(teams[t]).startRTM(function (err, bot) {
                     if (err) {
-                        console.log('Error connecting bot to Slack:',err);
+                        console.log('Error connecting bot to Slack:', err);
                     } else {
                         _trackBot(bot, bots);
                     }

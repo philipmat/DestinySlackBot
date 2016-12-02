@@ -15,17 +15,25 @@ let regexMap = {
 function action(bot, message) {
     util.parseMessage(message, regexMap)
         .then(command => {
-            if(!command.gamerTag) {
+            if (!command.gamerTag) {
                 return `Command: \`trials last week\` requires a valid \`gamer tag\` be specified`;
             }
 
             return weeklyStats(WEEK.PREVIOUS, command)
         })
         .then(response => {
+            if(message.type === 'interactive_message_callback') {
+                return bot.replyInteractive(message, response);
+            }
             return bot.reply(message, response)
         })
         // .then(response => bot.reply(message, response))
-        .catch(error => console.log(error.message));
+        .catch(error => {
+            if (error.type === 'interactive') {
+                return bot.reply(message, error.payload);
+            }
+            console.log(error.message)
+        });
 }
 
 export default new BotAction(

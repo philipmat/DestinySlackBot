@@ -13,7 +13,7 @@ export default class Convert {
         return +(Math.round(`${value}e+${places}`) + `e-${places}`);
     }
     static membershipTypeToPlatform(membershipTypeId) {
-        return membershipType.toString(membershipTypeId);
+        return membershipType.toString(+membershipTypeId);
     }
     static platformToMembershipType(platform) {
         return membershipType[platform];
