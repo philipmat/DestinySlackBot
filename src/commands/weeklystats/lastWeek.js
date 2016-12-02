@@ -8,9 +8,19 @@ let command          = ['trials last week', 'trials lastweek'],
     description      = 'returns trials stats for previous week.',
     requiresGamerTag = true;
 
+let regexMap = {
+    gamerTag: new RegExp(/.*/g)
+};
+
 function action(bot, message) {
-    util.getName(message)
-        .then(gamerTag => weeklyStats(WEEK.PREVIOUS, gamerTag))
+    util.parseMessage(message, regexMap)
+        .then(command => {
+            if(!command.weekNumber && !command.gamerTag) {
+                return `Command: \`trials week\` requires a valid \`week number\` and \`gamer tag\` be specified`;
+            }
+
+            return weeklyStats(WEEK.PREVIOUS, command)
+        })
         .then(response => bot.reply(message, response))
         .catch(error => console.log(error.message));
 }

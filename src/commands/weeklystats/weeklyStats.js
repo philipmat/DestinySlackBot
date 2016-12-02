@@ -12,13 +12,13 @@ export {
     WEEK
 };
 
-function getWeeklyStats(week, gamerTag) {
+function getWeeklyStats(week, command) {
     let weekNumber = +week;
     if (isNaN(weekNumber) || weekNumber < -1 /* || weekNumber > MAX_WEEK_NUMBER*/) {
         return `${week} is not a valid number for week`;
     }
 
-    return util.getPlayerId(gamerTag)
+    return util.getPlayerId(command.gamerTag, command.membershipType)
         .then(player => _getSpecificWeeklyStats(weekNumber, player))
         .then(_processWeeklyStats)
         .catch(error => console.log(error.message));
@@ -26,7 +26,7 @@ function getWeeklyStats(week, gamerTag) {
 
 function _getSpecificWeeklyStats(weekNumber, player) {
     return api.slack.trialsWeek({
-        membershipId: player.membershipId,
+        membershipId: player.shift().membershipId,
         weekNumber
     })
         .then(DestinyTrialsReportApiRequest.unwrap)

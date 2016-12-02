@@ -37,7 +37,7 @@ export default class Bot {
             actions = privateProps.get(this).actions;
 
         actions.push(action);
-        controller.hears(action.getCommand(), action.getRespondsTo(), action.invoke());
+        controller.hears(action.getCommand(), action.getRespondsTo(), action.invoke.bind(action));
     }
 
     // TODO: Remove this later.  Used for testing stuff atm

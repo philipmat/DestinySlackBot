@@ -18,6 +18,6 @@ actions.forEach(action => {
 console.log('Commands Loaded');
 
 console.log('Done');
-
-slackbot.helpAction({}, {});
-console.log('Help Action Invoked');
+//
+// slackbot.helpAction({}, {});
+// console.log('Help Action Invoked');

@@ -1,7 +1,6 @@
 import util from '../../util';
 import BotAction from '../../bot/BotAction';
 import weeklyStats from './weeklyStats';
-import {WEEK} from './weeklyStats';
 
 let command          = ['trials week', 'trialsweek'],
     respondsTo       = ['direct_message', 'direct_mention', 'mention'],
@@ -20,7 +19,7 @@ function action(bot, message) {
                 return `Command: \`trials week\` requires a valid \`week number\` and \`gamer tag\` be specified`;
             }
 
-            return weeklyStats(command.weekNumber, command.gamerTag)
+            return weeklyStats(command.weekNumber, command)
         })
         .then(response => bot.reply(message, response))
         .catch(error => console.log(error.message));
