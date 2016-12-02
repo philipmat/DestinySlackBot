@@ -15,8 +15,8 @@ let regexMap = {
 function action(bot, message) {
     util.parseMessage(message, regexMap)
         .then(command => {
-            if(!command.weekNumber && !command.gamerTag) {
-                return `Command: \`trials week\` requires a valid \`week number\` and \`gamer tag\` be specified`;
+            if(!command.gamerTag) {
+                return `Command: \`trials last week\` requires a valid \`gamer tag\` be specified`;
             }
 
             return weeklyStats(WEEK.PREVIOUS, command)

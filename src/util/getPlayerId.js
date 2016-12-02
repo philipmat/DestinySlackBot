@@ -3,10 +3,7 @@ import util from './index';
 export default getPlayerId;
 
 function getPlayerId(displayName, membershipType) {
-    let networkName;
-
     if (membershipType) {
-        networkName = membershipType === 1 ? 'xbox' : 'playstation';
         return util.searchDestinyPlayer(membershipType, displayName);
     }
 
