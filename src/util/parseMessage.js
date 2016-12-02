@@ -6,10 +6,11 @@ const PLATFORM_REGEX = new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g);
 
 function parseMessage(message, regexMap = {}) {
     // ¿¿
-    message = message.text.replace(message.match[0], '').trim().toLowerCase();
+    let command = message.match[0];
+    message = message.text.replace(command, '').trim().toLowerCase();
 
     let platform = message.match(PLATFORM_REGEX),
-        values   = {};
+        values   = {command: command};
 
     if (platform && platform.length) {
         values.platform = platform[0].trim();

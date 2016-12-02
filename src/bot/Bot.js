@@ -7,10 +7,10 @@ let privateProps = new WeakMap();
 export default class Bot {
     constructor() {
         let controller = slackbot({
-            json_file_store: './db_slackbutton_bot/'
+            json_file_store: './db_slackbutton_bot/',
+            interactive_replies: true
         });
 
-        // TODO: Uncomment when oath and whatnot is ready to play with
         controller.configureSlackApp({
             clientId: CONFIG.SLACK.CLIENT_ID,
             clientSecret: CONFIG.SLACK.CLIENT_SECRET,
@@ -48,6 +48,21 @@ export default class Bot {
     start() {
         let controller = privateProps.get(this).controller,
             bots = privateProps.get(this).bots;
+
+        controller.on('interactive_message_callback', (bot, message) => {
+
+            var action = message.actions[0];
+            var id = message.callback_id;
+
+            // replyInteractive replaces the interactive response
+            // bot.replyInteractive(message, reply);
+            bot.reply({
+                type: 'message',
+                text: action.value
+            }, (err, convo) => {
+            });
+        });
+
 
         _startWebServer.call(this);
         controller.on('create_bot', (bot, config) => {

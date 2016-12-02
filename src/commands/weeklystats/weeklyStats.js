@@ -18,10 +18,17 @@ function getWeeklyStats(week, command) {
         return `${week} is not a valid number for week`;
     }
 
-    return util.getPlayerId(command.gamerTag, command.membershipType)
+    return util.getPlayerId(command.gamerTag, command.membershipType, command.command)
         .then(player => _getSpecificWeeklyStats(weekNumber, player))
         .then(_processWeeklyStats)
-        .catch(error => console.log(error.message));
+        // .catch(error => console.log(error.message));
+        .catch(error => {
+            if (error.attachments) {
+                return error;
+            } else {
+                return console.log(error.message);
+            }
+        });
 }
 
 function _getSpecificWeeklyStats(weekNumber, player) {

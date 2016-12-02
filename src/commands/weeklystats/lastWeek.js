@@ -21,7 +21,10 @@ function action(bot, message) {
 
             return weeklyStats(WEEK.PREVIOUS, command)
         })
-        .then(response => bot.reply(message, response))
+        .then(response => {
+            return bot.reply(message, response)
+        })
+        // .then(response => bot.reply(message, response))
         .catch(error => console.log(error.message));
 }
 
