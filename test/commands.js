@@ -1,8 +1,8 @@
-import {CONFIG} from '../constants';
-import {DestinyApiRequest} from 'mrdandandan-destiny-api-module';
+let CONFIG = require('../dist/constants').CONFIG;
+let DestinyApiRequest = require('mrdandandan-destiny-api-module').DestinyApiRequest;
 DestinyApiRequest.setApiKey(CONFIG.BUNGIE.API_KEY);
 
-import {all as commands} from '../commands';
+let commands = require('../dist/commands').all;
 
 let bot = {
     reply: function(message, response) {
@@ -17,7 +17,7 @@ let basicGamertagMessage = {
     match: ['']
 };
 let numberAndGamertagMessage = {
-    text: '20 xxl jigsaw',
+    text: 'xbox 20 xxl jigsaw',
     match: ['']
 };
 
@@ -42,8 +42,8 @@ function weekStatsTest() {
     commands.trialsWeek.invoke(bot, numberAndGamertagMessage);
 }
 
-currentMapTest();
-archnemesisTest();
-lastWeekStatsTest();
-thisWeekStatsTest();
+// currentMapTest();
+// archnemesisTest();
+// lastWeekStatsTest();
+// thisWeekStatsTest();
 weekStatsTest();

@@ -1,11 +1,9 @@
-const membershipTypeMap = {
-    '1': 'xbox',
-    '2': 'ps'
-};
-const membershipPlatformMap = {
-    'xbox': 1,
-    'ps': 2
-};
+import Enumeration from './enumeration';
+
+const membershipType = new Enumeration({
+    xbox: 1,
+    ps: 2
+});
 
 export default class Convert {
     static toInt(value) {
@@ -14,10 +12,10 @@ export default class Convert {
     static toRoundedValue(value, places) {
         return +(Math.round(`${value}e+${places}`) + `e-${places}`);
     }
-    static membershipTypeToPlatform(membershipType) {
-        return membershipTypeMap[membershipType];
+    static membershipTypeToPlatform(membershipTypeId) {
+        return membershipType.toString(membershipTypeId);
     }
-    static platformToMembershipType(membershipPlatform) {
-        return membershipPlatformMap[membershipPlatform];
+    static platformToMembershipType(platform) {
+        return membershipType[platform];
     }
 }

@@ -9,7 +9,7 @@ let command          = ['trials week', 'trialsweek'],
     requiresGamerTag = true;
 
 let regexMap = {
-    weekNumber: new RegExp(/\d*/g),
+    weekNumber: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)/g),
     gamerTag: new RegExp(/.*/g)
 };
 
