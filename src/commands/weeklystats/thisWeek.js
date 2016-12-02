@@ -3,9 +3,9 @@ import BotAction from '../../bot/BotAction';
 import weeklyStats from './weeklyStats';
 import {WEEK} from './weeklyStats';
 
-let command          = ['trials this week', 'trials this week', 'trials this week', 'trials thisweek'],
-    respondsTo       = ['direct_message', 'direct_mention', 'mention'],
-    description      = 'returns trials stats for current week.',
+let command = ['trials this week', 'trials this week', 'trials this week', 'trials thisweek'],
+    respondsTo = ['direct_message', 'direct_mention', 'mention'],
+    description = 'returns trials stats for current week.',
     requiresGamerTag = true;
 
 let regexMap = {
@@ -13,16 +13,25 @@ let regexMap = {
 };
 
 function action(bot, message) {
-    util.parseMessage(message, regexMap)
-        .then(command => {
-            if(!command.gamerTag) {
-                return `Command: \`trials this week\` requires a valid \`gamer tag\` be specified`;
-            }
+    let command = util.parseMessage(message, regexMap),
+        promise;
 
-            return weeklyStats(WEEK.CURRENT, command)
+    if (!command.gamerTag) {
+        promise = Promise.resolve(`Command: \`trials last week\` requires a valid \`gamer tag\` be specified`);
+    } else {
+        promise = weeklyStats(WEEK.CURRENT, command);
+    }
+
+    return promise
+        .then(response => {
+            return bot[command.replyFunctionName](message, response);
         })
-        .then(response => bot.reply(message, response))
-        .catch(error => console.log(error.message));
+        .catch(error => {
+            if (error.type === 'interactive') {
+                return bot.reply(message, error.payload);
+            }
+            console.log(error.message);
+        });
 }
 
 export default new BotAction(

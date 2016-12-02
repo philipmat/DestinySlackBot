@@ -1,16 +1,24 @@
 import util from './index';
 
-export default parseMessage;
+export default {
+    parse,
+    parseAsync
+};
 
 const PLATFORM_REGEX = new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g);
 
-function parseMessage(message, regexMap = {}) {
+function parse(message, regexMap = {}) {
     // ¿¿
-    let command = message.match ? message.match[0] : message.callback_id;
+    let command = message.match ? message.match[0] : message.callback_id,
+        replyFunctionName = _getReplyFunctionName(message.type);
+
     message = message.text.replace(command, '').trim().toLowerCase();
 
     let platform = message.match(PLATFORM_REGEX),
-        values   = {command: command};
+        values = {
+            command,
+            replyFunctionName
+        };
 
     if (platform && platform.length) {
         values.platform = platform[0].trim();
@@ -31,5 +39,18 @@ function parseMessage(message, regexMap = {}) {
         message = message.replace(values[key], '');
     }
 
-    return Promise.resolve(values);
+    return values;
+}
+
+function parseAsync(message, regexMap = {}) {
+    return Promise.resolve(parseMessage(message, regexMap));
+}
+
+function _getReplyFunctionName(messageType) {
+    switch (messageType) {
+        case 'interactive_message_callback':
+            return 'replyInteractive';
+        default:
+            return 'reply';
+    }
 }

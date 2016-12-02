@@ -15,7 +15,8 @@ let exports = {
     Enumeration,
     getName,
     getPlayerId,
-    parseMessage,
+    parseMessage: parseMessage.parse,
+    parseMessageAsync: parseMessage.parseAsync,
     searchDestinyPlayer,
     slack
 };
