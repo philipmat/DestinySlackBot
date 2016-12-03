@@ -12,12 +12,16 @@ let command = ['trials archnemesis', 'trials arch nemesis'],
     };
 
 function action(bot, message, command) {
-    util.getName(message)
-        .then(util.getPlayerId)
+    util.getPlayerId(command.gamerTag, command.membershipType, command.command)
         .then(_getArchNemesis)
         .then(_processArchNemesis)
-        .then(response => bot.reply(message, response))
-        .catch(error => console.log(error.message));
+        .then(response => bot[command.replyFunctionName](message, response))
+        .catch(error => {
+            if (error.type === 'interactive') {
+                return bot.reply(message, error.payload);
+            }
+            console.log(error.message);
+        });
 }
 
 function _getArchNemesis(player) {
