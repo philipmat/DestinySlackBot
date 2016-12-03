@@ -32,8 +32,10 @@ function _buildHelpMessage(actions, commandGroup) {
         response.push(`_No commands implemented for this grouping_`)
     } else {
         actions.forEach(action => {
+            let commandParameters = action.getCommandParameters(),
+                commandParameterString = commandParameters.length ? ` <${commandParameters.join('> <')}>` : '';
             let commands = action.getCommand().reduce((output, current) => {
-                output.push(`\`${current}${action.getCommandParameters().join('\`,\`')}\``);
+                output.push(`\`${current}${commandParameterString}\``);
                 return output;
             }, []).join(' | ');
             response.push(`${commands}: ${action.getDescription()}`);
