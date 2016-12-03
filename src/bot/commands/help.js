@@ -1,4 +1,6 @@
 import BotAction from '../BotAction';
+import {COMMAND_GROUPING, REGEX} from '../../constants';
+
 
 let command = ['help', 'command'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
@@ -20,9 +22,10 @@ function action(bot, message, actions) {
     return response;
 }
 
-export default new BotAction (
+export default new BotAction ({
     command,
     respondsTo,
     action,
-    description
-)
+    description,
+    grouping: COMMAND_GROUPING.NONE
+})

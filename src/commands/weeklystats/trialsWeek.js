@@ -1,29 +1,18 @@
 import util from '../../util';
 import BotAction from '../../bot/BotAction';
 import weeklyStats from './weeklyStats';
+import {COMMAND_GROUPING, REGEX} from '../../constants';
 
 let command = ['trials week', 'trialsweek'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns trials stats for specified week.',
-    requiresGamerTag = true;
+    paramRegex = {
+        weekNumber: REGEX.NUMBER,
+        gamerTag: REGEX.GAMER_TAG
+    };
 
-let regexMap = {
-    weekNumber: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)/g),
-    gamerTag: new RegExp(/.*/g)
-};
-
-function action(bot, message) {
-    let command = util.parseMessage(message, regexMap),
-        promise;
-
-
-    if (!command.weekNumber && !command.gamerTag) {
-        promise = Promise.resolve(`Command: \`trials week\` requires a valid \`week number\` and \`gamer tag\` be specified`);
-    } else {
-        promise = weeklyStats(command.weekNumber, command);
-    }
-
-    return promise
+function action(bot, message, command) {
+    return weeklyStats(command.weekNumber, command)
         .then(response => {
             return bot[command.replyFunctionName](message, response);
         })
@@ -35,10 +24,11 @@ function action(bot, message) {
         });
 }
 
-export default new BotAction(
+export default new BotAction({
     command,
     respondsTo,
     action,
     description,
-    requiresGamerTag
-)
+    grouping: COMMAND_GROUPING.TRIALS,
+    paramRegex
+})

@@ -1,12 +1,13 @@
 import api from '../destinytrialsreport-api-module';
 import {DestinyTrialsReportApiRequest} from '../destinytrialsreport-api-module';
 import BotAction from '../bot/BotAction';
+import {COMMAND_GROUPING} from '../constants';
 
 let command     = ['currentmap', 'trials map'],
     respondsTo  = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns the most recent trials map';
 
-function action(bot, message) {
+function action(bot, message, command) {
     _getCurrentMap()
         .then(DestinyTrialsReportApiRequest.unwrap)
         .then(_processCurrentMapResponse)
@@ -40,9 +41,10 @@ function _processCurrentMapResponse(result) {
     return response;
 }
 
-export default new BotAction(
+export default new BotAction({
     command,
     respondsTo,
     action,
-    description
-)
+    description,
+    grouping: COMMAND_GROUPING.TRIALS
+})

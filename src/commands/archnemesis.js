@@ -1,13 +1,16 @@
 import api from '../destinytrialsreport-api-module';
 import util from '../util';
 import BotAction from '../bot/BotAction';
+import {COMMAND_GROUPING, REGEX} from '../constants';
 
 let command = ['trials archnemesis', 'trials arch nemesis'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns top 5 enemies played against more than once.',
-    requiresGamerTag = true;
+    paramRegex = {
+        gamerTag: REGEX.GAMER_TAG
+    };
 
-function action(bot, message) {
+function action(bot, message, command) {
     util.getName(message)
         .then(util.getPlayerId)
         .then(_getArchNemesis)
@@ -42,7 +45,7 @@ function _processArchNemesis(results) {
         attachments = nemeses.map(nemesis => util.slack.formatAttachment({
             title: `${nemesis.displayName}`,
             title_link: `http://my.trials.report/${util.Convert.membershipTypeToPlatform(nemesis.membershipType)}/${nemesis.displayName}`,
-            text:  `${nemesis.count} match${nemesis.count !== 1 ? 'es' : ''}`,
+            text: `${nemesis.count} match${nemesis.count !== 1 ? 'es' : ''}`,
             fallback: `${nemesis.displayName}: ${nemesis.count} match${nemesis.count !== 1 ? 'es' : ''}`
         }));
     }
@@ -55,10 +58,11 @@ function _processArchNemesis(results) {
     return response;
 }
 
-export default new BotAction(
+export default new BotAction({
     command,
     respondsTo,
     action,
     description,
-    requiresGamerTag
-)
+    grouping: COMMAND_GROUPING.TRIALS,
+    paramRegex
+})

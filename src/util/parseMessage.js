@@ -7,7 +7,7 @@ export default {
 
 const PLATFORM_REGEX = new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g);
 
-function parse(message, regexMap = {}) {
+function parse(message, paramRegex = {}) {
     // ¿¿
     let command = message.match ? message.match[0] : message.callback_id,
         replyFunctionName = _getReplyFunctionName(message.type);
@@ -26,8 +26,8 @@ function parse(message, regexMap = {}) {
         message = message.replace(values.platform, '');
     }
 
-    for (let key in regexMap) {
-        let regex = regexMap[key],
+    for (let key in paramRegex) {
+        let regex = paramRegex[key],
             match = message.match(regex);
 
         if (!match && !match.length) {
@@ -42,8 +42,8 @@ function parse(message, regexMap = {}) {
     return values;
 }
 
-function parseAsync(message, regexMap = {}) {
-    return Promise.resolve(parseMessage(message, regexMap));
+function parseAsync(message, paramRegex = {}) {
+    return Promise.resolve(parse(message, paramRegex));
 }
 
 function _getReplyFunctionName(messageType) {

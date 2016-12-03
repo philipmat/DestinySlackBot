@@ -47,9 +47,28 @@ const BOT_NAME = new Enumeration({
     BANSHEE_44: 'Banshee-44 [Bot]'
 });
 
+const COMMAND_GROUPING = new Enumeration({
+    ALL: 'all',
+    CRUCIBLE: 'crucible',
+    DIRECTOR: 'director',
+    GUNSMITH: 'gunsmith',
+    NONE: 'none',
+    TRIALS: 'trials'
+});
+
+const REGEX = {
+    // Always add GAMER_TAG last to the paramRegex collection as it just grabs whatever is left when parsing
+    GAMER_TAG: new RegExp(/.*/g),
+    PLATFORM: new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g),
+    NUMBER: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)/g)
+};
+
 export {
     CONFIG,
     METHOD,
+    REGEX,
+
+    COMMAND_GROUPING,
 
     BOT_NAME,
     COLOR,
