@@ -29,7 +29,7 @@ export default class BotAction {
             missingParameters;
 
         missingParameters = commandParameters.filter(param => {
-            return !command[param];
+            return !command[param] && paramRegex[param].required;
         });
 
         if(!missingParameters.length) {
@@ -42,6 +42,10 @@ export default class BotAction {
 
     getDescription() {
         return privateProps.get(this).description;
+    }
+
+    getGrouping() {
+        return privateProps.get(this).grouping;
     }
 
     // requiresGamerTag() {

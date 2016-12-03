@@ -57,10 +57,10 @@ const COMMAND_GROUPING = new Enumeration({
 });
 
 const REGEX = {
-    // Always add GAMER_TAG last to the paramRegex collection as it just grabs whatever is left when parsing
-    GAMER_TAG: new RegExp(/.*/g),
+    // Always add ANY_TEXT last to the paramRegex collection as it just grabs whatever is left when parsing
+    ANY_TEXT: new RegExp(/.*/g),
     PLATFORM: new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g),
-    NUMBER: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)/g)
+    NUMBER: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)|(^\d+$)/g)
 };
 
 export {

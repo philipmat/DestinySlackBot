@@ -1,13 +1,14 @@
 import api from '../destinytrialsreport-api-module';
 import util from '../util';
 import BotAction from '../bot/BotAction';
+import CommandParamRegex from '../bot/CommandParamRegex';
 import {COMMAND_GROUPING, REGEX} from '../constants';
 
 let command = ['trials archnemesis', 'trials arch nemesis'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns top 5 enemies played against more than once.',
     paramRegex = {
-        gamerTag: REGEX.GAMER_TAG
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
     };
 
 function action(bot, message, command) {

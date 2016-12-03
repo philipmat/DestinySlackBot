@@ -116,6 +116,11 @@ function _loadBasicInteractions() {
     });
 
     controller.on('interactive_message_callback', (bot, message) => {
+        if(message.callback_id === 'help') {
+            botCommands.help.invoke(bot, message, this.getActions());
+            return;
+        }
+
         let action = this.getActions().find(a => {
             return a.getCommand().includes(message.callback_id);
         });

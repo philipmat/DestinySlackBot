@@ -27,10 +27,10 @@ function parse(message, paramRegex = {}) {
     }
 
     for (let key in paramRegex) {
-        let regex = paramRegex[key],
+        let regex = paramRegex[key].pattern,
             match = message.match(regex);
 
-        if (!match && !match.length) {
+        if (!match || !match.length) {
             values[key] = undefined;
             continue;
         }

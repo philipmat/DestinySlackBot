@@ -1,5 +1,5 @@
-import util from '../../util';
 import BotAction from '../../bot/BotAction';
+import CommandParamRegex from '../../bot/CommandParamRegex';
 import weeklyStats from './weeklyStats';
 import {COMMAND_GROUPING, REGEX} from '../../constants';
 
@@ -7,8 +7,8 @@ let command = ['trials week', 'trialsweek'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns trials stats for specified week.',
     paramRegex = {
-        weekNumber: REGEX.NUMBER,
-        gamerTag: REGEX.GAMER_TAG
+        weekNumber: new CommandParamRegex(REGEX.NUMBER),
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
     };
 
 function action(bot, message, command) {
