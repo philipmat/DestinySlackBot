@@ -126,6 +126,8 @@ function _loadBasicInteractions() {
         });
 
         action.invoke(bot, message);
+
+        bot.replyInteractive(message, '_Loading..._');
         //var action = message.actions[0];
         //var id = message.callback_id;
 
