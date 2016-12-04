@@ -6,7 +6,7 @@ export default getPlayerId;
 
 function getPlayerId(displayName, membershipType, command) {
     if (membershipType) {
-        return util.searchDestinyPlayer(membershipType, displayName)
+        return util.destiny.searchDestinyPlayer(membershipType, displayName)
             .then(response => {
                 if (response instanceof Array && response.length) {
                     return response[0];
@@ -15,7 +15,7 @@ function getPlayerId(displayName, membershipType, command) {
             });
     }
 
-    return util.searchDestinyPlayer(-1, displayName).then(results => {
+    return util.destiny.searchDestinyPlayer(-1, displayName).then(results => {
         if (results.length > 1) {
             return Promise.reject(new DestinySlackBotError(
                 `${displayName} found on multiple platforms`,

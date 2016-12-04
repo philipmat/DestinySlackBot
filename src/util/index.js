@@ -7,17 +7,17 @@ import Enumeration from './enumeration';
 import getName from'./getName';
 import getPlayerId from './getPlayerId';
 import parseMessage from './parseMessage';
-import searchDestinyPlayer from'./searchDestinyPlayer';
+import destiny from'./destiny';
 import slack from './slack';
 
 let exports = {
     Convert,
+    destiny,
     Enumeration,
     getName,
     getPlayerId,
     parseMessage: parseMessage.parse,
     parseMessageAsync: parseMessage.parseAsync,
-    searchDestinyPlayer,
     slack
 };
 
