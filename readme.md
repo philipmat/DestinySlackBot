@@ -54,6 +54,7 @@ Assuming everything above was done properly, we should now be set to run the bot
 
 #### Building
 There are some npm scripts defined in `package.json` used for building the bot
+
 Both build commands will create the `./dist` directory and output the built scripts to it.
 
 * `npm run build` will build the bot and include sourcemaps
