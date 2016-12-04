@@ -1,5 +1,5 @@
 import util from '../util';
-import {COMMAND_GROUPING} from '../constants';
+import {COMMAND_GROUPING, ERROR_TYPE} from '../constants';
 
 let privateProps = new WeakMap();
 export default class BotAction {
@@ -7,7 +7,7 @@ export default class BotAction {
         privateProps.set(this, {
             command: command instanceof Array ? command : command.split(','),
             respondsTo: respondsTo instanceof Array ? respondsTo : respondsTo.split(','),
-            invoke: typeof(action) === 'function' ? action : function() {},
+            invoke: typeof(action) === 'function' ? action : function () {},
             description,
             grouping,
             paramRegex
@@ -32,8 +32,12 @@ export default class BotAction {
             return !command[param] && paramRegex[param].required;
         });
 
-        if(!missingParameters.length) {
-            return privateProps.get(this).invoke(...arguments, command);
+        if (!missingParameters.length) {
+            return Promise.resolve(privateProps.get(this).invoke(...arguments, command))
+                .catch(error => BotAction.Error(bot, message, error))
+                .catch(error => {
+                    console.log(`BotAction.Error failed`, error);
+                });
         }
 
         let errorMessage = `Command: \`${this.getCommand()[0]}\` requires a valid \`${missingParameters.join('`,`')}\` be specified`;
@@ -48,18 +52,33 @@ export default class BotAction {
         return privateProps.get(this).grouping;
     }
 
-    // requiresGamerTag() {
-    //     return !!privateProps.get(this).requiresGamerTag;
-    // }
-
     getCommandParameters() {
         let paramRegex = privateProps.get(this).paramRegex,
             values = [];
 
-        for(let key in paramRegex) {
+        for (let key in paramRegex) {
             values.push(key);
         }
 
         return values;
+    }
+
+    static Error(bot, message, error) {
+        error = error || {};
+
+        let errorLevel;
+
+        switch(error.type) {
+            case ERROR_TYPE.ACCOUNT_FOUND_MULTIPLE_PLATFORMS:
+                let interactiveResponse = util.slack.interactivePlatformResponse(error.context.parameters.displayName, error.context.parameters.command);
+                bot.reply(message, interactiveResponse);
+                errorLevel = 'warn';
+                break;
+            default:
+                errorLevel = 'error';
+                break;
+        }
+
+        console[errorLevel](error.message ? error.message : error);
     }
 }

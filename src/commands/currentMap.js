@@ -8,11 +8,10 @@ let command     = ['currentmap', 'trials map'],
     description = 'returns the most recent trials map';
 
 function action(bot, message, command) {
-    _getCurrentMap()
+    return _getCurrentMap()
         .then(DestinyTrialsReportApiRequest.unwrap)
         .then(_processCurrentMapResponse)
-        .then(response => bot.reply(message, response))
-        .catch(error => console.log(error));
+        .then(response => bot.reply(message, response));
 }
 
 function _getCurrentMap() {

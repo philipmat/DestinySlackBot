@@ -1,4 +1,6 @@
 import util from './index';
+import {ERROR_TYPE} from '../constants';
+import DestinySlackBotError from '../bot/DestinySlackBotError';
 
 export default getPlayerId;
 
@@ -6,44 +8,26 @@ function getPlayerId(displayName, membershipType, command) {
     if (membershipType) {
         return util.searchDestinyPlayer(membershipType, displayName)
             .then(response => {
-                if(response instanceof Array && response.length) {
+                if (response instanceof Array && response.length) {
                     return response[0];
                 }
-                return Promise.reject(`searchDestinyPlayer failed for ${displayName} // ${membershipType}`);
+                return Promise.reject(new DestinySlackBotError(`searchDestinyPlayer failed for ${displayName} // ${membershipType}`));
             });
     }
 
     return util.searchDestinyPlayer(-1, displayName).then(results => {
         if (results.length > 1) {
-            return Promise.reject(
+            return Promise.reject(new DestinySlackBotError(
+                `${displayName} found on multiple platforms`,
+                ERROR_TYPE.ACCOUNT_FOUND_MULTIPLE_PLATFORMS,
                 {
-                    type: 'interactive',
-                    payload: {
-                        attachments: [
-                            {
-                                title: `Match for ${displayName} found for multiple platforms`,
-                                callback_id: command,
-                                attachment_type: 'default',
-                                actions: [
-                                    {
-                                        "name": displayName,
-                                        "text": "Playstation",
-                                        "value": `${command} ps ${displayName}`,
-                                        "type": "button",
-                                    },
-                                    {
-                                        "name": displayName,
-                                        "text": "Xbox",
-                                        "value": `${command} xbox ${displayName}`,
-                                        "type": "button",
-                                    }
-                                ]
-                            }
-                        ]
+                    parameters: {
+                        displayName,
+                        command
                     }
-                })
-        } else if(results.length === 0) {
-            return Promise.reject(new Error(`Match for ${displayName} not found on either platform`));
+                }));
+        } else if (results.length === 0) {
+            return Promise.reject(new DestinySlackBotError(`Match for ${displayName} not found on either platform`));
         } else {
             return results[0];
         }

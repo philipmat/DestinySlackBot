@@ -15,12 +15,6 @@ function action(bot, message, command) {
     return weeklyStats(command.weekNumber, command)
         .then(response => {
             return bot[command.replyFunctionName](message, response);
-        })
-        .catch(error => {
-            if (error.type === 'interactive') {
-                return bot.reply(message, error.payload);
-            }
-            console.log(error.message);
         });
 }
 

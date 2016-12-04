@@ -63,8 +63,14 @@ const REGEX = {
     NUMBER: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)|(^\d+$)/g)
 };
 
+const ERROR_TYPE = new Enumeration({
+    GENERAL: 0,
+    ACCOUNT_FOUND_MULTIPLE_PLATFORMS: 1000
+});
+
 export {
     CONFIG,
+    ERROR_TYPE,
     METHOD,
     REGEX,
 
