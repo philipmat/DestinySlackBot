@@ -2,7 +2,7 @@ let CONFIG = require('../dist/constants').CONFIG;
 let DestinyApiRequest = require('mrdandandan-destiny-api-module').DestinyApiRequest;
 DestinyApiRequest.setApiKey(CONFIG.BUNGIE.API_KEY);
 
-let commands = require('../dist/commands').all;
+let commands = require('../dist/commands').trials;
 
 let bot = {
     reply: function(message, response) {

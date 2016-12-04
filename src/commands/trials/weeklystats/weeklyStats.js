@@ -1,6 +1,6 @@
-import api from '../../destinytrialsreport-api-module';
-import {DestinyTrialsReportApiRequest} from '../../destinytrialsreport-api-module';
-import util from '../../util';
+import api from '../../../destinytrialsreport-api-module';
+import {DestinyTrialsReportApiRequest} from '../../../destinytrialsreport-api-module';
+import util from '../../../util';
 
 const WEEK = {
     CURRENT: 0,

@@ -15,7 +15,16 @@ export default class BotAction {
     }
 
     getCommand() {
-        return privateProps.get(this).command;
+        let command = privateProps.get(this).command,
+            grouping = privateProps.get(this).grouping;
+        return command.reduce((output, current) => {
+            if([COMMAND_GROUPING.ALL, COMMAND_GROUPING.NONE].includes(grouping)) {
+                output.push(current);
+            } else {
+                output.push(`${grouping} ${current}`);
+            }
+            return output;
+        }, []) ;
     }
 
     getRespondsTo() {

@@ -1,25 +1,11 @@
-import currentMap from './currentMap';
-import archnemesis from './archnemesis';
-import lastWeek from './weeklystats/lastWeek';
-import thisWeek from './weeklystats/thisWeek';
-import trialsWeek from './weeklystats/trialsWeek';
+import trials from './trials';
 
-export default [
-    archnemesis,
-    currentMap,
-    lastWeek,
-    thisWeek,
-    trialsWeek
-]
+import {commands as trialsCommands} from './trials';
 
-let all = {
-    archnemesis,
-    currentMap,
-    lastWeek,
-    thisWeek,
-    trialsWeek
-};
 
+let actions = [].concat(trials);
+
+export default actions;
 export {
-    all
-}
+    trialsCommands as trials
+};

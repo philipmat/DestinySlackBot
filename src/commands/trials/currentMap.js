@@ -1,9 +1,9 @@
-import api from '../destinytrialsreport-api-module';
-import {DestinyTrialsReportApiRequest} from '../destinytrialsreport-api-module';
-import BotAction from '../bot/BotAction';
-import {COMMAND_GROUPING} from '../constants';
+import api from '../../destinytrialsreport-api-module';
+import {DestinyTrialsReportApiRequest} from '../../destinytrialsreport-api-module';
+import BotAction from '../../bot/BotAction';
+import {COMMAND_GROUPING} from '../../constants';
 
-let command     = ['currentmap', 'trials map'],
+let command     = ['map'],
     respondsTo  = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns the most recent trials map';
 
