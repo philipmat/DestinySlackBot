@@ -1,6 +1,7 @@
 import api from '../../../destinytrialsreport-api-module';
 import {DestinyTrialsReportApiRequest} from '../../../destinytrialsreport-api-module';
 import util from '../../../util';
+import {ICON} from '../../../constants';
 
 const WEEK = {
     CURRENT: 0,
@@ -52,13 +53,12 @@ function _processWeeklyStats(results) {
     let attachment = util.slack.formatAttachment({
         title,
         title_link: titleLink,
+        thumb_url: ICON.FLAWLESS_YEAR_3,
         fields: aggregateFields.fields,
         fallback: aggregateFields.fallback
     });
 
-    let response = util.slack.formatResponse({
-        attachments: attachment
-    });
+    let response = util.destiny.helpers.trialsSlackResponse('', attachment);
 
     return response;
 }

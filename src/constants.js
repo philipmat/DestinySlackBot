@@ -35,10 +35,11 @@ const COLOR = new Enumeration({
 });
 
 const ICON = new Enumeration({
-    BROTHER_VANCE: 'http://bungie.net/common/destiny_content/icons/1b05977e8d0a56538c8a74ce6335ba28.jpg',
+    BROTHER_VANCE: 'https://avatars.slack-edge.com/2016-03-04/24531630918_f9aaff1dc98d0c43d827_192.png',
     BANSHEE_44: 'http://bungie.net/img/destiny_content/vendor/ae76ecf23cd84d0eae8ebd87f177324e.png',
     CAYDE_6: 'http://bungie.net/img/destiny_content/vendor/c8db203af7a14f16a9f7f32b8f5817b8.png',
-    LORD_SHAXX: 'http://bungie.net/img/destiny_content/vendor/14414f531bc248e69d5c70b7a708ccb2.png'
+    LORD_SHAXX: 'http://bungie.net/img/destiny_content/vendor/14414f531bc248e69d5c70b7a708ccb2.png',
+    FLAWLESS_YEAR_3: 'http://bungie.net/common/destiny_content/icons/1b05977e8d0a56538c8a74ce6335ba28.jpg'
 });
 
 const PERSONA = new Enumeration({

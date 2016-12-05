@@ -128,16 +128,6 @@ function _loadBasicInteractions() {
         action.invoke(bot, message);
 
         bot.replyInteractive(message, '_Loading..._');
-        //var action = message.actions[0];
-        //var id = message.callback_id;
-
-        // replyInteractive replaces the interactive response
-        // bot.replyInteractive(message, reply);
-        //bot.reply({
-        //    type: 'message',
-        //    text: action.value
-        //}, (err, convo) => {
-        //});
     });
 
     controller.hears(botCommands.help.getCommand(), botCommands.help.getRespondsTo(), (bot, message) => {
