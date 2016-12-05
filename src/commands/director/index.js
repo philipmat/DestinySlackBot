@@ -5,10 +5,3 @@ export default [
     dailyChapter,
     weeklyHeroic
 ];
-
-let commands = {
-    dailyChapter,
-    weeklyHeroic
-};
-
-export {commands};

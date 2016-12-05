@@ -8,8 +8,13 @@
     "GG" : {
     },
     "SLACK": {
+<<<<<<< Updated upstream
       "CLIENT_ID": "",
       "CLIENT_SECRET": ""
+=======
+      "CLIENT_ID": "36303935634.105477298868",
+      "CLIENT_SECRET": "5d499cee82859a18493d9a217872b5a6"
+>>>>>>> Stashed changes
     },
     "TRIALS_REPORT": {
       "API_URL": "http://api.destinytrialsreport.com"

@@ -26,6 +26,8 @@ const COLOR = new Enumeration({
     // Bot
     BROTHER_VANCE: '#D0D15A',
     BANSHEE_44: '#4A4C47',
+    CAYDE_6: '#4A4C47',
+    LORD_SHAXX: '#4A4C47',
 
     // Misc
     ORANGE: '#F35A00',

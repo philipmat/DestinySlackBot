@@ -11,15 +11,3 @@ export default [
     thisWeek,
     trialsWeek
 ]
-
-let commands = {
-    archnemesis,
-    currentMap,
-    lastWeek,
-    thisWeek,
-    trialsWeek
-};
-
-export {
-    commands
-}
