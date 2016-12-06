@@ -10,6 +10,8 @@ DestinySlackBot is built using `botkit` in concert with standard es2015 JavaScri
 * Navigate to [Slack](https://api.slack.com/apps) and create an app
     * After creating your app, take note of `Client ID` and `Client Secret`
     * Navigate to the `Bot Users` tab and name give your bot user a name. 
+* Navigate to [Twitch](https://www.twitch.tv/settings/connections) and create an app (bottom of page)
+    * Make note of the API key
 * Make sure [NodeJS](https://nodejs.org/en/) is installed
 
 #### Process
@@ -18,7 +20,8 @@ Run `npm i`
 Open `./app.config.js` and update it with the 
 `Bungie API Key`,
 `Slack Client ID`,
-`Slack Client Secret`
+`Slack Client Secret`,
+`Twitch API Key`
 obtained during preparation.  The port can be modified as well if desired.
 ```json
 {
@@ -33,6 +36,9 @@ obtained during preparation.  The port can be modified as well if desired.
     "SLACK": {
       "CLIENT_ID": "Slack Client Id",
       "CLIENT_SECRET": "Slack Client Secret"
+    },
+    "TWITCH": {
+      "API_KEY": "Twitch Api Key"
     },
     "TRIALS_REPORT": {
       "API_URL": "http://api.destinytrialsreport.com"
@@ -131,7 +137,8 @@ export default new BotAction({
     description,
     // Specify the group this command is a part of
     grouping: COMMAND_GROUPING.ALL,
-    paramRegex
+    paramRegex,
+    requiresAdmin // Optional
 })
 ```
 
