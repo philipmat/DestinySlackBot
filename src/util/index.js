@@ -1,7 +1,7 @@
 import {CONFIG} from '../constants';
 import {DestinyApiRequest} from 'mrdandandan-destiny-api-module';
 import {twitchRequest} from 'mrdandandan-twitch-module';
-DestinyApiRequest.setApiKey(CONFIG.BUNGIE.API_KEY);
+DestinyApiRequest.setApiKey(process.env.BUNGIE_API_KEY || CONFIG.BUNGIE.API_KEY);
 twitchRequest.setApiKey(CONFIG.TWITCH.API_KEY);
 
 import Convert from './convert';
