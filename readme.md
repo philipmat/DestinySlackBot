@@ -9,6 +9,7 @@ DestinySlackBot is built using `botkit` in concert with standard es2015 JavaScri
     * Take note of your application's `Bungie API Key`
 * Navigate to [Slack](https://api.slack.com/apps) and create an app
     * After creating your app, take note of `Client ID` and `Client Secret`
+    * Navigate to the `Bot Users` tab and name give your bot user a name. 
 * Make sure [NodeJS](https://nodejs.org/en/) is installed
 
 #### Process
@@ -85,7 +86,10 @@ info: ** Serving oauth return endpoint: http://127.0.0.1:8001/oauth
 ...
 ```
 
-Navigate to `http://127.0.0.1:8001/login` specified in the output and authorize the bot on your team.
+* Navigate to the `OAuth & Permissions` tab on [Your Slack App's Config Page](https://api.slack.com/apps/)
+    * Set the redirect URL(s) to: `http://127.0.0.1:8001/oauth`
+
+* Navigate to `http://127.0.0.1:8001/login` specified in the output and authorize the bot on your team.
 
 *_Congratulations!_* the bot should be set up and good to go!
 
