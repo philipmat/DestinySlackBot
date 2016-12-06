@@ -12,8 +12,8 @@ export default class Bot {
         });
 
         controller.configureSlackApp({
-            clientId: process.ENV.SLACK_CLIENT_ID || CONFIG.SLACK.CLIENT_ID,
-            clientSecret: process.ENV.SLACK_CLIENT_SECRET || CONFIG.SLACK.CLIENT_SECRET,
+            clientId: process.env.SLACK_CLIENT_ID || CONFIG.SLACK.CLIENT_ID,
+            clientSecret: process.env.SLACK_CLIENT_SECRET || CONFIG.SLACK.CLIENT_SECRET,
             scopes: ['bot']
         });
 
