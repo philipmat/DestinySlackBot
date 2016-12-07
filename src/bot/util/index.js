@@ -1,9 +1,5 @@
-import get from './storage.get';
-import save from './storage.save';
+import StoragePromise from './StoragePromise';
 
 export default {
-    storage: {
-        get,
-        save
-    }
+    StoragePromise
 }

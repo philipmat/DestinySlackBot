@@ -11,29 +11,11 @@ let command     = ['live', 'online'],
         channel: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
-let _streamers = [
-    {
-        name: 'Wish You Luck',
-        channel: 'WishYouLuckk'
-    },
-    {
-        name: 'SayNoToRage',
-        channel: 'SayNoToRage'
-    },
-    {
-        name: 'TrueVanguard',
-        channel: 'thetruevanguard'
-    },
-    {
-        name: 'Luminosity',
-        channel: 'luminosity'
-    }
-];
-
 function action(bot, message, command) {
+    let _storage = bot_util.StoragePromise.init(bot.botkit).teams;
     let promise = command.channel ?
         Promise.resolve([{name: command.channel, channel: command.channel}]) :
-        bot_util.storage.get(bot.botkit.storage.teams, message.team)
+        _storage.get(message.team)
             .then(team_data => {
                 return team_data.streamers || [];
             });

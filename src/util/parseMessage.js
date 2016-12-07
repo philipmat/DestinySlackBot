@@ -5,14 +5,14 @@ export default {
     parseAsync
 };
 
-const PLATFORM_REGEX = new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g);
+const PLATFORM_REGEX = new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/ig);
 
 function parse(message, paramRegex = {}) {
     // ¿¿
     let command = message.match ? message.match[0] : message.callback_id,
         replyFunctionName = _getReplyFunctionName(message.type);
 
-    message = message.text.replace(command, '').trim().toLowerCase();
+    message = message.text.replace(command, '').trim();
 
     let platform = message.match(PLATFORM_REGEX),
         values = {
@@ -21,9 +21,10 @@ function parse(message, paramRegex = {}) {
         };
 
     if (platform && platform.length) {
-        values.platform = platform[0].trim();
+        let _platform = platform[0].trim();
+        values.platform = _platform.toLowerCase();
         values.membershipType = util.Convert.platformToMembershipType(values.platform);
-        message = message.replace(values.platform, '');
+        message = message.replace(_platform, '');
     }
 
     for (let key in paramRegex) {

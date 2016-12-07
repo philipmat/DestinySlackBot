@@ -119,7 +119,8 @@ let command = ['<the base command/commands>'],
     paramRegex = {
         // Parameters to be parsed out of user input, regex-based
         gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
-    };
+    },
+    requiresAdmin = true;
 
 // Action to be invoked when command is entered
 function action(bot, message, command) {

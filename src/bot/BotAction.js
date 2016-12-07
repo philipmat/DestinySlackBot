@@ -101,6 +101,7 @@ export default class BotAction {
                 break;
         }
 
+        bot.reply(message, error.message ? error.message : error);
         console[errorLevel](error.message ? error.message : error);
     }
 }

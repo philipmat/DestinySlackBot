@@ -3,16 +3,16 @@
     "PORT": 8001,
 
     "BUNGIE": {
-      "API_KEY": ""
+      "API_KEY": "e675d08bc41146c19819468a674512ed"
     },
     "GG" : {
     },
     "SLACK": {
-      "CLIENT_ID": "",
-      "CLIENT_SECRET": ""
+      "CLIENT_ID": "36303935634.105477298868",
+      "CLIENT_SECRET": "5d499cee82859a18493d9a217872b5a6"
     },
     "TWITCH": {
-      "API_KEY": ""
+      "API_KEY": "o9xqfs34sp8sf2pj6clrwja7z400lbn"
     },
     "TRIALS_REPORT": {
       "API_URL": "http://api.destinytrialsreport.com"
