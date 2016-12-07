@@ -22,7 +22,7 @@ export default class Bot {
             controller,
             bots: {},
             actions: [],
-            twitchAnnouncer: new TwitchAnnouncer(60000)
+            twitchAnnouncer: new TwitchAnnouncer()
         });
     }
 
@@ -59,7 +59,6 @@ export default class Bot {
             bot.startRTM(err => {
                 if (!err) {
                     _trackBot.call(this, bot, bots);
-                    privateProps.get(this).twitchAnnouncer.start();
                 }
 
                 bot.startPrivateConversation({user: config.createdBy}, (err, convo) => {
@@ -90,7 +89,7 @@ function _trackBot(bot, bots) {
     let twitchAnnouncer = privateProps.get(this).twitchAnnouncer;
 
     bots[bot.config.token] = bot;
-    twitchAnnouncer.addBot(bot);
+    twitchAnnouncer.loadBot(bot);
 }
 
 function _startWebServer() {
@@ -163,7 +162,5 @@ function _connectExistingTeams() {
                 });
             }
         }
-
-        privateProps.get(this).twitchAnnouncer.start();
     });
 }

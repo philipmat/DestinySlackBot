@@ -7,29 +7,24 @@ import {COLOR} from '../../constants';
 let privateProps = new WeakMap();
 let runningBots = new WeakMap();
 export default class TwitchAnnouncer {
-    constructor(refreshInterval) {
+    constructor(refreshInterval = 60000) {
         privateProps.set(this, {
             refreshInterval,
-            bots: [],
-            running: false
+            bots: []
         });
     }
 
-    addBot(bot) {
+    loadBot(bot) {
+        if(privateProps.get(bot)) {
+            return;
+        }
+        let {refreshInterval} = privateProps.get(this);
+
+        privateProps.set(bot, {
+            running: false,
+            interval: _run(bot, StoragePromise.init(bot.botkit), refreshInterval)
+        });
         privateProps.get(this).bots.push(bot);
-    }
-
-    start() {
-        let {bots, refreshInterval} = privateProps.get(this);
-        privateProps.get(this).running = true;
-
-        bots.forEach(bot => {
-            if(runningBots.get(bot)) {
-                return;
-            }
-            _run(bot, StoragePromise.init(bot.botkit.storage), refreshInterval);
-            runningBots.set(bot, true);
-        })
     }
 }
 
@@ -38,7 +33,7 @@ function _run(bot, storage, interval) {
         team_id         = bot.team_info.id,
         channel_id;
 
-    setInterval(() => {
+    return setInterval(() => {
         console.info(`Start checking online streams for team: ${team_id}`);
         storage.teams.get(team_id)
             .then(team_data => {
@@ -47,7 +42,8 @@ function _run(bot, storage, interval) {
             })
             .then(onlineStreams => _checkNewlyOnlineStreams(onlineStreams, onlineStreamers))
             .then(_processNewlyOnlineStreams)
-            .then(response => _sendResponse(bot, response, channel_id));
+            .then(response => _sendResponse(bot, response, channel_id))
+            .catch(rejection => console.log(rejection));
     }, interval)
 }
 
@@ -69,10 +65,10 @@ function _checkNewlyOnlineStreams(onlineStreams, onlineStreamers) {
 }
 
 function _processNewlyOnlineStreams(streams) {
-    console.info(`Processing ${streams} online streams`);
+    console.info(`Processing ${streams.length} online streams`);
 
     if (!streams.length) {
-        return Promise.reject();
+        return Promise.reject(`There are no newly online streams`);
     }
 
     let attachments = streams.map(stream => {
