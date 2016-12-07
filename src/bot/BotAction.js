@@ -51,7 +51,7 @@ export default class BotAction {
                     if (!requiresAdmin) {
                         return;
                     }
-                    if (!user.is_admin || !user.is_owner) {
+                    if (!user.is_admin && !user.is_owner) {
                         return Promise.reject(`The command ${command.command} can only be invoked by an admin`);
                     }
                 })

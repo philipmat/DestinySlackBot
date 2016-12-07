@@ -1,21 +1,20 @@
-import util from './index';
+import Convert from './convert';
+import {REGEX} from '../constants';
 
 export default {
     parse,
     parseAsync
 };
 
-const PLATFORM_REGEX = new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/ig);
-
 function parse(message, paramRegex = {}) {
     // ¿¿
-    let command = message.match ? message.match[0] : message.callback_id,
+    let command           = message.match ? message.match[0] : message.callback_id,
         replyFunctionName = _getReplyFunctionName(message.type);
 
     message = message.text.replace(command, '').trim();
 
-    let platform = message.match(PLATFORM_REGEX),
-        values = {
+    let platform = message.match(REGEX.PLATFORM),
+        values   = {
             command,
             replyFunctionName
         };
@@ -23,20 +22,30 @@ function parse(message, paramRegex = {}) {
     if (platform && platform.length) {
         let _platform = platform[0].trim();
         values.platform = _platform.toLowerCase();
-        values.membershipType = util.Convert.platformToMembershipType(values.platform);
-        message = message.replace(_platform, '');
+        values.membershipType = Convert.platformToMembershipType(values.platform);
+        message = message.replace(_platform, '').trim();
     }
 
     for (let key in paramRegex) {
         let regex = paramRegex[key].pattern,
+            match,
+            index;
+
+        // TODO: Kinda rigged, should refactor to something not stupid later
+        if(regex.toString().indexOf('(.*?)') !== -1) {
+            match = regex.exec(message);
+            index = 1;
+        } else {
             match = message.match(regex);
+            index = 0;
+        }
 
         if (!match || !match.length) {
             values[key] = undefined;
             continue;
         }
 
-        values[key] = match[0].trim();
+        values[key] = match[index].trim();
         message = message.replace(values[key], '');
     }
 

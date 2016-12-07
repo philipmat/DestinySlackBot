@@ -75,8 +75,10 @@ const REGEX = {
     ANY_TEXT: new RegExp(/.*/g),
     FIRST_WORD: new RegExp(/^[A-Za-z]\w+/g),
     GAMER_TAG: new RegExp(/[A-Za-z].+/g),
-    PLATFORM: new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g),
-    NUMBER: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)|(^\d+$)/g)
+    PLATFORM: new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/ig),
+    NUMBER: new RegExp(/(^\d+\s)|(\s\d+\s)|(\s\d+$)|(^\d+$)/g),
+    SLACK_CHANNEL_REFERENCE: new RegExp(/<#(.*?)\|\w+>/g),
+    SLACK_CHANNEL_NAME: new RegExp(/<#.*\|(.*?)>/g)
 };
 
 const ERROR_TYPE = new Enumeration({
