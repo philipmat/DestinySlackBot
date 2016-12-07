@@ -90,7 +90,7 @@ function _trackBot(bot, bots) {
 function _startWebServer() {
     let controller = privateProps.get(this).controller;
 
-    controller.setupWebserver(CONFIG.PORT, (err, webserver) => {
+    controller.setupWebserver(process.env.PORT || CONFIG.PORT, (err, webserver) => {
         controller.createWebhookEndpoints(controller.webserver);
 
         controller.createOauthEndpoints(controller.webserver, (err, req, res) => {
