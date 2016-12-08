@@ -19,7 +19,7 @@ function getWeeklyStats(week, command) {
         return `${week} is not a valid number for week`;
     }
 
-    return util.getPlayerId(command.gamerTag, command.membershipType, command.command)
+    return util.getPlayerId(command.gamerTag, command.membershipType, command)
         .then(player => _getSpecificWeeklyStats(weekNumber, player))
         .then(_processWeeklyStats);
 }
