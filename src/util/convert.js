@@ -26,5 +26,5 @@ export default class Convert {
             sets[i] = array.slice(j, j + size);
         }
         return sets;
-    };
+    }
 }

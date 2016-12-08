@@ -1,5 +1,6 @@
 import util from '../util';
 import {COMMAND_GROUPING, ERROR_TYPE} from '../constants';
+import DestinySlackBotError from './DestinySlackBotError';
 
 let privateProps = new WeakMap();
 export default class BotAction {
@@ -52,7 +53,9 @@ export default class BotAction {
                         return;
                     }
                     if (!user.is_admin && !user.is_owner) {
-                        return Promise.reject(`The command ${command.command} can only be invoked by an admin`);
+                        return Promise.reject(
+                            new DestinySlackBotError(`The command ${command.command} can only be invoked by an admin`, ERROR_TYPE.PERMISSION_DENIED)
+                        )
                     }
                 })
                 .then(() => Promise.resolve(privateProps.get(this).invoke(...arguments, command)))
@@ -96,12 +99,27 @@ export default class BotAction {
                 bot.reply(message, interactiveResponse);
                 errorLevel = 'warn';
                 break;
+            case ERROR_TYPE.ACCESS_DENIED:
+                bot.reply(message, error.context);
+                errorLevel = 'warn';
+                break;
+            case ERROR_TYPE.BAD_RESPONSE:
+                bot.reply(message, error.context);
+                errorLevel = 'error';
+                break;
+            case ERROR_TYPE.ITEM_EXISTS:
+                bot.reply(message, error.context);
+                errorLevel = 'error';
+                break;
+            case ERROR_TYPE.ITEM_NOT_FOUND:
+                bot.reply(message, error.context);
+                errorLevel = 'error';
+                break;
             default:
                 errorLevel = 'error';
                 break;
         }
 
-        bot.reply(message, error.message ? error.message : error);
         console[errorLevel](error.message ? error.message : error);
     }
 }

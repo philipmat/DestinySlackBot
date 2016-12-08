@@ -4,7 +4,8 @@ import lastWeek from './weeklystats/lastWeek';
 import thisWeek from './weeklystats/thisWeek';
 import trialsWeek from './weeklystats/trialsWeek';
 import thisMap from './mapstats/thisMap';
-import mapStats from './mapstats/mapStats';
+import onMap from './mapstats/onMap';
+import trialsMap from './mapstats/trialsMap';
 
 export default [
     archnemesis,
@@ -13,5 +14,6 @@ export default [
     thisWeek,
     trialsWeek,
     thisMap,
-    mapStats
+    onMap,
+    trialsMap
 ]

@@ -1,27 +1,21 @@
-import BotAction from '../../../bot/BotAction';
 import api from '../../../destinytrialsreport-api-module';
 import {DestinyTrialsReportApiRequest} from '../../../destinytrialsreport-api-module';
-import CommandParamRegex from '../../../bot/CommandParamRegex';
-import {COMMAND_GROUPING, REGEX} from '../../../constants';
 import util from '../../../util';
+import {ICON} from '../../../constants';
 
-let command = ['map stats', 'mapstats'],
-    respondsTo = ['direct_message', 'direct_mention', 'mention'],
-    description = 'returns trials stats for specified map.',
-    paramRegex = {
-        mapId: new CommandParamRegex(REGEX.NUMBER),
-        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
-    };
+const MAP = {
+    CURRENT: 0,
+    PREVIOUS: -1
+};
 
-function action(bot, message, command) {
-    console.log(command)
-    return getMapStats(command.mapId, command)
-        .then(response => bot[command.replyFunctionName](message, response));
-}
+export default getMapStats;
+export {
+    MAP
+};
 
 function getMapStats(map, command) {
     if (isNaN(map) || map < -1) {
-        return `${map} is not a valid number for week`;
+        return `${map} is not a valid id for map`;
     }
 
     return util.getPlayerId(command.gamerTag, command.membershipType, command.command)
@@ -29,13 +23,11 @@ function getMapStats(map, command) {
         .then(_processMapStats);
 }
 
-function _getSpecificMapStats(map, player) {
-    console.log(map);
-    console.log(player);
-
+function _getSpecificMapStats(mapId, player) {
+    console.log(mapId, player)
     return api.slack.thisMap({
         membershipId: player.membershipId,
-        mapId: map
+        mapId
     })
         .then(DestinyTrialsReportApiRequest.unwrap)
         .then(response => {
@@ -47,9 +39,8 @@ function _getSpecificMapStats(map, player) {
 }
 
 function _processMapStats(results) {
-    let {stats, player} = results;
-
     console.log(results)
+    let {stats, player} = results;
 
     if (!stats || !+stats.matches) {
         return `No matches found for ${player.displayName || player}`;
@@ -63,22 +54,12 @@ function _processMapStats(results) {
     let attachment = util.slack.formatAttachment({
         title,
         title_link: titleLink,
+        thumb_url: ICON.FLAWLESS_YEAR_3,
         fields: aggregateFields.fields,
         fallback: aggregateFields.fallback
     });
 
-    let response = util.slack.formatResponse({
-        attachments: attachment
-    });
+    let response = util.destiny.helpers.trialsSlackResponse('', attachment);
 
     return response;
 }
-
-export default new BotAction({
-    command,
-    respondsTo,
-    action,
-    description,
-    grouping: COMMAND_GROUPING.TRIALS,
-    paramRegex
-})

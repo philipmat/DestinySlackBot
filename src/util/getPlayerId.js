@@ -11,7 +11,7 @@ function getPlayerId(displayName, membershipType, command) {
                 if (response instanceof Array && response.length) {
                     return response[0];
                 }
-                return Promise.reject(new DestinySlackBotError(`searchDestinyPlayer failed for ${displayName} // ${membershipType}`));
+                return Promise.reject(new DestinySlackBotError(`searchDestinyPlayer failed for ${displayName} // ${membershipType}`, ERROR_TYPE.BAD_RESPONSE));
             });
     }
 
@@ -27,7 +27,7 @@ function getPlayerId(displayName, membershipType, command) {
                     }
                 }));
         } else if (results.length === 0) {
-            return Promise.reject(new DestinySlackBotError(`Match for ${displayName} not found on either platform`));
+            return Promise.reject(new DestinySlackBotError(`Match for ${displayName} not found on either platform`, ERROR_TYPE.ITEM_NOT_FOUND));
         } else {
             return results[0];
         }

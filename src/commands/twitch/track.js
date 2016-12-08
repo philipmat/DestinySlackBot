@@ -1,7 +1,8 @@
 import BotAction from '../../bot/BotAction';
+import DestinySlackBotError from '../../bot/DestinySlackBotError';
 import util from '../../util';
 import bot_util from '../../bot/util';
-import {COMMAND_GROUPING, COLOR, REGEX} from '../../constants';
+import {COMMAND_GROUPING, COLOR, REGEX, ERROR_TYPE} from '../../constants';
 import CommandParamRegex from '../../bot/CommandParamRegex';
 import twitch from 'mrdandandan-twitch-module';
 
@@ -23,12 +24,18 @@ function action(bot, message, command) {
                 switch (response.error.status) {
                     case 404:
                         return Promise.reject(
-                            util.twitch.helpers.twitchSlackResponse(`Specified channel *${command.channel}* is invalid`
+                            new DestinySlackBotError(
+                                `Twitch invalid channel response`,
+                                ERROR_TYPE.BAD_RESPONSE,
+                                util.twitch.helpers.twitchSlackResponse(`Specified channel *${command.channel}* is invalid`)
                             )
                         );
                     default:
                         return Promise.reject(
-                            util.twitch.helpers.twitchSlackResponse(`There was an error looking up *${command.channel}*\n${response.error.message}`
+                            new DestinySlackBotError(
+                                `Twitch error response`,
+                                ERROR_TYPE.BAD_RESPONSE,
+                                util.twitch.helpers.twitchSlackResponse(`There was an error looking up *${command.channel}*\n${response.error.message}`)
                             )
                         );
                 }
@@ -38,15 +45,19 @@ function action(bot, message, command) {
             return _storage.get(message.team)
         })
         .then(team_data => {
-            let streamers = team_data.streamers = team_data.streamers || [];
+            let streamers = team_data.twitch_streamers = team_data.twitch_streamers || [];
 
             let exists = streamers.some(streamer => {
                 return streamer.channel.toLowerCase() === command.channel.toLowerCase();
             });
             if (exists) {
                 return Promise.reject(
-                    util.twitch.helpers.twitchSlackResponse(
-                        `Channel *${command.channel}* is already being tracked`
+                    new DestinySlackBotError(
+                        `Twitch channel already tracked`,
+                        ERROR_TYPE.ITEM_EXISTS,
+                        util.twitch.helpers.twitchSlackResponse(
+                            `Channel *${command.channel}* is already being tracked`,
+                        )
                     )
                 );
             }
@@ -59,7 +70,7 @@ function action(bot, message, command) {
             return _storage.save(team_data);
         })
         .then(team_data => {
-            let streamers = team_data.streamers = team_data.streamers || [],
+            let streamers = team_data.twitch_streamers = team_data.twitch_streamers || [],
                 text = `Twitch channel *${streamers[streamers.length - 1].name}* is now being tracked`;
 
             return util.twitch.helpers.twitchSlackResponse(text);

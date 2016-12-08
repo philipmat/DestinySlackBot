@@ -1,7 +1,8 @@
 import api from '../../destinytrialsreport-api-module';
 import {DestinyTrialsReportApiRequest} from '../../destinytrialsreport-api-module';
 import BotAction from '../../bot/BotAction';
-import {COMMAND_GROUPING} from '../../constants';
+import DestinySlackBotError from '../../bot/DestinySlackBotError';
+import {COMMAND_GROUPING, ERROR_TYPE} from '../../constants';
 import util from '../../util';
 
 let command     = ['current map'],
@@ -20,14 +21,16 @@ function _getCurrentMap() {
 }
 
 function _processCurrentMapResponse(result) {
-    if(!result) {
-        return Promise.reject(`Invalid response for currentMap request`);
+    if (!result) {
+        return Promise.reject(
+            new DestinySlackBotError(`Invalid response for currentMap request`, ERROR_TYPE.BAD_RESPONSE)
+        );
     }
 
-    let mapName = result['activityName'],
+    let mapName   = result['activityName'],
         pgcrImage = result['pgcrImage'];
 
-    let text = `This week's map is...`,
+    let text        = `This week's map is...`,
         attachments = [
             {
                 fallback: mapName,
@@ -35,7 +38,6 @@ function _processCurrentMapResponse(result) {
                 image_url: `http://www.bungie.net${pgcrImage}`
             }
         ];
-
 
     return util.destiny.helpers.trialsSlackResponse(text, attachments);
 }

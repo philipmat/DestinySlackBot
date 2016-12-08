@@ -38,7 +38,7 @@ function _run(bot, storage, interval) {
         storage.teams.get(team_id)
             .then(team_data => {
                 channel_id = team_data.twitch_announcement_channel;
-                return TwitchMonitor.checkOnlineStreamsFor(team_data.streamers || [])
+                return TwitchMonitor.checkOnlineStreamsFor(team_data.twitch_streamers || [])
             })
             .then(onlineStreams => _checkNewlyOnlineStreams(onlineStreams, onlineStreamers))
             .then(_processNewlyOnlineStreams)
