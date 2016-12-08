@@ -8,7 +8,7 @@ export default {
 
 function parse(message, paramRegex = {}) {
     // ¿¿
-    let command           = message.match ? message.match.input : message.callback_id,
+    let command           = message.text,
         baseCommand       = message.match ? message.match[0] : message.callback_id,
         replyFunctionName = _getReplyFunctionName(message);
 
