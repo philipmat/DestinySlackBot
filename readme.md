@@ -9,6 +9,9 @@ DestinySlackBot is built using `botkit` in concert with standard es2015 JavaScri
     * Take note of your application's `Bungie API Key`
 * Navigate to [Slack](https://api.slack.com/apps) and create an app
     * After creating your app, take note of `Client ID` and `Client Secret`
+    * Navigate to the `Bot Users` tab and name give your bot user a name. 
+* Navigate to [Twitch](https://www.twitch.tv/settings/connections) and create an app (bottom of page)
+    * Make note of the API key
 * Make sure [NodeJS](https://nodejs.org/en/) is installed
 
 #### Process
@@ -17,7 +20,8 @@ Run `npm i`
 Open `./app.config.js` and update it with the 
 `Bungie API Key`,
 `Slack Client ID`,
-`Slack Client Secret`
+`Slack Client Secret`,
+`Twitch API Key`
 obtained during preparation.  The port can be modified as well if desired.
 ```json
 {
@@ -32,6 +36,9 @@ obtained during preparation.  The port can be modified as well if desired.
     "SLACK": {
       "CLIENT_ID": "Slack Client Id",
       "CLIENT_SECRET": "Slack Client Secret"
+    },
+    "TWITCH": {
+      "API_KEY": "Twitch Api Key"
     },
     "TRIALS_REPORT": {
       "API_URL": "http://api.destinytrialsreport.com"
@@ -85,7 +92,10 @@ info: ** Serving oauth return endpoint: http://127.0.0.1:8001/oauth
 ...
 ```
 
-Navigate to `http://127.0.0.1:8001/login` specified in the output and authorize the bot on your team.
+* Navigate to the `OAuth & Permissions` tab on [Your Slack App's Config Page](https://api.slack.com/apps/)
+    * Set the redirect URL(s) to: `http://127.0.0.1:8001/oauth`
+
+* Navigate to `http://127.0.0.1:8001/login` specified in the output and authorize the bot on your team.
 
 *_Congratulations!_* the bot should be set up and good to go!
 
@@ -109,7 +119,8 @@ let command = ['<the base command/commands>'],
     paramRegex = {
         // Parameters to be parsed out of user input, regex-based
         gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
-    };
+    },
+    requiresAdmin = true;
 
 // Action to be invoked when command is entered
 function action(bot, message, command) {
@@ -127,7 +138,8 @@ export default new BotAction({
     description,
     // Specify the group this command is a part of
     grouping: COMMAND_GROUPING.ALL,
-    paramRegex
+    paramRegex,
+    requiresAdmin // Optional
 })
 ```
 

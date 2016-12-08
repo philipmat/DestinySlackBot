@@ -49,10 +49,7 @@ function _processArchNemesis(results) {
         }));
     }
 
-    response = util.slack.formatResponse({
-        text: title,
-        attachments
-    });
+    response = util.destiny.helpers.trialsSlackResponse(title, attachments);
 
     return response;
 }

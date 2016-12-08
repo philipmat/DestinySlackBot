@@ -1,20 +1,12 @@
 import crucible from './crucible';
 import director from './director';
 import trials from './trials';
-
-import {commands as crucibleCommands} from './crucible';
-import {commands as directorCommands} from './director';
-import {commands as trialsCommands} from './trials';
-
+import twitch from './twitch';
 
 let actions = []
     .concat(crucible)
     .concat(director)
-    .concat(trials);
+    .concat(trials)
+    .concat(twitch);
 
 export default actions;
-export {
-    crucibleCommands as crucible,
-    directorCommands as director,
-    trialsCommands as trials
-};

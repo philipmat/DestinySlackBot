@@ -1,6 +1,6 @@
 import BotAction from '../BotAction';
 import CommandParamRegex from '../CommandParamRegex';
-import {COMMAND_GROUPING, REGEX} from '../../constants';
+import {COMMAND_GROUPING, REGEX, COLOR} from '../../constants';
 
 
 let command = ['help', 'command'],
@@ -51,7 +51,8 @@ function _buildGroupingSelectionInteractiveResponse() {
             title: `Select command grouping for help`,
             callback_id: `help`,
             attachmentType: `default`,
-            actions: []
+            actions: [],
+            color: COLOR.SOLAR
         };
 
     for(let key in COMMAND_GROUPING) {
@@ -69,6 +70,18 @@ function _buildGroupingSelectionInteractiveResponse() {
             value: `help ${grouping}`,
             type: `button`
         });
+
+        if(attachment.actions.length >= 5) {
+            response.attachments.push(attachment);
+            attachment = {
+                fallback: `additional options`,
+                callback_id: `help`,
+                attachmentType: `default`,
+                actions: [],
+                color: COLOR.SOLAR,
+                mrkdwn_in: ["text", "pretext", "title"]
+            }
+        }
     }
 
     response.attachments.push(attachment);
