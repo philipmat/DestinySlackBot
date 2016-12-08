@@ -3,7 +3,7 @@ import {DestinyTrialsReportApiRequest} from '../../destinytrialsreport-api-modul
 import BotAction from '../../bot/BotAction';
 import {COMMAND_GROUPING} from '../../constants';
 
-let command     = ['map'],
+let command     = ['current map'],
     respondsTo  = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns the most recent trials map';
 

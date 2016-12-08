@@ -18,4 +18,13 @@ export default class Convert {
     static platformToMembershipType(platform) {
         return membershipType[platform];
     }
+    static inChunksOf(array, size) {
+        var sets = [];
+        var chunks = array.length / size;
+
+        for (var i = 0, j = 0; i < chunks; i++, j += size) {
+            sets[i] = array.slice(j, j + size);
+        }
+        return sets;
+    };
 }

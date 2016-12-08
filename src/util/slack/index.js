@@ -7,5 +7,5 @@ export default {
     aggregateMatchStatsToFields,
     formatAttachment,
     formatResponse,
-    interactivePlatformResponse
+    interactivePlatformResponse,
 }

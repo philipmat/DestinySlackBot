@@ -3,13 +3,17 @@ import archnemesis from './archnemesis';
 import lastWeek from './weeklystats/lastWeek';
 import thisWeek from './weeklystats/thisWeek';
 import trialsWeek from './weeklystats/trialsWeek';
+import thisMap from './mapstats/thisMap';
+import mapStats from './mapstats/mapStats';
 
 export default [
     archnemesis,
     currentMap,
     lastWeek,
     thisWeek,
-    trialsWeek
+    trialsWeek,
+    thisMap,
+    mapStats
 ]
 
 let commands = {
@@ -17,7 +21,9 @@ let commands = {
     currentMap,
     lastWeek,
     thisWeek,
-    trialsWeek
+    trialsWeek,
+    thisMap,
+    mapStats
 };
 
 export {
