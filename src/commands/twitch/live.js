@@ -17,7 +17,7 @@ function action(bot, message, command) {
         Promise.resolve([{name: command.channel, channel: command.channel}]) :
         _storage.get(message.team)
             .then(team_data => {
-                return team_data.streamers || [];
+                return team_data.twitch_streamers || [];
             });
 
 

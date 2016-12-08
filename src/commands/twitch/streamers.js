@@ -13,7 +13,7 @@ function action(bot, message, command) {
 
     return _storage.get(message.team)
         .then(team_data => {
-            return team_data.streamers || [];
+            return team_data.twitch_streamers || [];
         })
         .then(streamers => {
             return util.twitch.helpers.twitchSlackResponse(

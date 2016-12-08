@@ -1,5 +1,5 @@
 import Convert from './convert';
-import {REGEX} from '../constants';
+import {REGEX, SLACK_REPLY_FUNCTION_NAME} from '../constants';
 
 export default {
     parse,
@@ -9,7 +9,7 @@ export default {
 function parse(message, paramRegex = {}) {
     // ¿¿
     let command           = message.match ? message.match[0] : message.callback_id,
-        replyFunctionName = _getReplyFunctionName(message.type);
+        replyFunctionName = _getReplyFunctionName(message);
 
     message = message.text.replace(command, '').trim();
 
@@ -32,7 +32,7 @@ function parse(message, paramRegex = {}) {
             index;
 
         // TODO: Kinda rigged, should refactor to something not stupid later
-        if(regex.toString().indexOf('(.*?)') !== -1) {
+        if (regex.toString().indexOf('(.*?)') !== -1) {
             match = regex.exec(message);
             index = 1;
         } else {
@@ -56,11 +56,10 @@ function parseAsync(message, paramRegex = {}) {
     return Promise.resolve(parse(message, paramRegex));
 }
 
-function _getReplyFunctionName(messageType) {
-    switch (messageType) {
-        case 'interactive_message_callback':
-            return 'replyInteractive';
-        default:
-            return 'reply';
+function _getReplyFunctionName(message) {
+    if (message.type === 'interactive_message_callback' ||
+        (message.hasOwnProperty('callback_id') && message.channel.startsWith('D'))) {
+        return SLACK_REPLY_FUNCTION_NAME.REPLY_INTERACTIVE;
     }
+    return SLACK_REPLY_FUNCTION_NAME.REPLY;
 }

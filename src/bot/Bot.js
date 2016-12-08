@@ -1,5 +1,5 @@
 import {slackbot} from 'botkit';
-import {CONFIG} from '../constants';
+import {CONFIG, SYSTEM_STRINGS} from '../constants';
 import botCommands from './commands';
 import TwitchAnnouncer from '../util/twitch/TwitchAnnouncer';
 
@@ -121,7 +121,12 @@ function _loadBasicInteractions() {
     });
 
     controller.on('interactive_message_callback', (bot, message) => {
-        if(message.callback_id === 'help') {
+        // If the message originated in a DM, gtfo
+        if(message.channel.startsWith('D')) {
+            return;
+        }
+
+        if (message.callback_id === 'help') {
             botCommands.help.invoke(bot, message, this.getActions());
             return;
         }

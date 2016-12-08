@@ -83,7 +83,11 @@ const REGEX = {
 
 const ERROR_TYPE = new Enumeration({
     GENERAL: 0,
-    ACCOUNT_FOUND_MULTIPLE_PLATFORMS: 1000
+    ACCESS_DENIED: 9999,
+    ACCOUNT_FOUND_MULTIPLE_PLATFORMS: 1000,
+    BAD_RESPONSE: 2000,
+    ITEM_EXISTS: 3000,
+    ITEM_NOT_FOUND: 3100
 });
 
 const ADVISOR = new Enumeration({
@@ -96,11 +100,23 @@ const ADVISOR = new Enumeration({
     WEEKLY_CRUCIBLE: 'weeklyCrucible'
 });
 
+const SYSTEM_STRINGS = {
+    EMPTY: '',
+    INTERACTIVE: 'interactive'
+};
+
+const SLACK_REPLY_FUNCTION_NAME = new Enumeration({
+    REPLY: 'reply',
+    REPLY_INTERACTIVE: 'replyInteractive'
+});
+
 export {
     CONFIG,
     ERROR_TYPE,
     METHOD,
     REGEX,
+    SLACK_REPLY_FUNCTION_NAME,
+    SYSTEM_STRINGS,
 
     COMMAND_GROUPING,
 
