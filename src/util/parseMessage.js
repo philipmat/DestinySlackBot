@@ -1,5 +1,5 @@
 import Convert from './convert';
-import {REGEX, SLACK_REPLY_FUNCTION_NAME} from '../constants';
+import {REGEX, SLACK_REPLY_FUNCTION_NAME, SYSTEM_STRINGS} from '../constants';
 
 export default {
     parse,
@@ -8,13 +8,15 @@ export default {
 
 function parse(message, paramRegex = {}) {
     // ¿¿
-    let command           = message.match ? message.match[0] : message.callback_id,
+    let command           = message.match ? message.match.input : message.callback_id,
+        baseCommand       = message.match ? message.match[0] : message.callback_id,
         replyFunctionName = _getReplyFunctionName(message);
 
-    message = message.text.replace(command, '').trim();
+    message = message.text.replace(baseCommand, SYSTEM_STRINGS.EMPTY).trim();
 
     let platform = message.match(REGEX.PLATFORM),
         values   = {
+            baseCommand,
             command,
             replyFunctionName
         };

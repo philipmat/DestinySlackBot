@@ -5,19 +5,19 @@ function interactivePlatformResponse(displayName, command) {
         attachments: [
             {
                 title: `Match for ${displayName} found for multiple platforms`,
-                callback_id: command,
+                callback_id: command.baseCommand,
                 attachment_type: 'default',
                 actions: [
                     {
                         "name": displayName,
                         "text": "Playstation",
-                        "value": `${command} ps ${displayName}`,
+                        "value": `${command.command} ps`,
                         "type": "button",
                     },
                     {
                         "name": displayName,
                         "text": "Xbox",
-                        "value": `${command} xbox ${displayName}`,
+                        "value": `${command.command} xbox`,
                         "type": "button",
                     }
                 ]
