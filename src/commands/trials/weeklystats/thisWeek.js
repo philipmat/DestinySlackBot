@@ -8,7 +8,7 @@ let command = ['this week', 'thisweek'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns trials stats for current week.',
     paramRegex = {
-        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
 function action(bot, message, command) {

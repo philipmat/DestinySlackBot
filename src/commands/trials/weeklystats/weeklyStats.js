@@ -14,12 +14,18 @@ export {
 };
 
 function getWeeklyStats(week, command) {
-    let weekNumber = +week;
+    let weekNumber = +week,
+        request;
     if (isNaN(weekNumber) || weekNumber < -1 /* || weekNumber > MAX_WEEK_NUMBER*/) {
         return `${week} is not a valid number for week`;
     }
+    if(command.gamerTag) {
+        request = util.getPlayerId(command.gamerTag, command.membershipType, command);
+    } else {
+        request = Promise.resolve(command.destiny_store);
+    }
 
-    return util.getPlayerId(command.gamerTag, command.membershipType, command)
+    return request
         .then(player => _getSpecificWeeklyStats(weekNumber, player))
         .then(_processWeeklyStats);
 }

@@ -1,6 +1,7 @@
 import util from '../util';
 import {COMMAND_GROUPING, ERROR_TYPE} from '../constants';
 import DestinySlackBotError from './DestinySlackBotError';
+import StoragePromise from './util/StoragePromise';
 
 let privateProps = new WeakMap();
 export default class BotAction {
@@ -18,7 +19,7 @@ export default class BotAction {
     }
 
     getCommand() {
-        let command  = privateProps.get(this).command,
+        let command = privateProps.get(this).command,
             grouping = privateProps.get(this).grouping;
         return command.reduce((output, current) => {
             if ([COMMAND_GROUPING.ALL, COMMAND_GROUPING.NONE].includes(grouping)) {
@@ -35,38 +36,53 @@ export default class BotAction {
     }
 
     invoke(bot, message) {
-        let paramRegex        = privateProps.get(this).paramRegex,
-            requiresAdmin     = privateProps.get(this).requiresAdmin,
+        let paramRegex = privateProps.get(this).paramRegex,
+            requiresAdmin = privateProps.get(this).requiresAdmin,
             commandParameters = this.getCommandParameters(),
-            command           = util.parseMessage(message, paramRegex),
-            missingParameters;
+            command = util.parseMessage(message, paramRegex),
+            storage = StoragePromise.init(bot.botkit);
 
-        missingParameters = commandParameters.filter(param => {
-            return !command[param] && paramRegex[param].required;
-        });
 
-        if (!missingParameters.length) {
-            let request = requiresAdmin ? getUser(bot, message) : Promise.resolve();
-            return request
-                .then(user => {
-                    if (!requiresAdmin) {
-                        return;
-                    }
-                    if (!user.is_admin && !user.is_owner) {
-                        return Promise.reject(
-                            new DestinySlackBotError(`The command ${command.command} can only be invoked by an admin`, ERROR_TYPE.PERMISSION_DENIED)
-                        )
-                    }
-                })
-                .then(() => Promise.resolve(privateProps.get(this).invoke(...arguments, command)))
-                .catch(error => BotAction.Error(bot, message, error))
-                .catch(error => {
-                    console.log(`BotAction.Error failed`, error);
+        return Promise.resolve()
+            .then(() => storage.users.get(message.user))
+            .then(user => {
+                command.destiny_store = user.destiny_store;
+            })
+            // Check for missing parameters
+            .then(() => {
+                let missingParameters;
+                missingParameters = commandParameters.filter(param => {
+                    return !command[param] && paramRegex[param].required;
                 });
-        }
+                if (paramRegex.gamerTag && !command.gamerTag && !command.destiny_store) {
+                    missingParameters.push('gamerTag');
+                }
 
-        let errorMessage = `Command: \`${this.getCommand()[0]}\` requires a valid \`${missingParameters.join('`,`')}\` be specified`;
-        return bot[command.replyFunctionName](message, errorMessage);
+                if (missingParameters.length) {
+                    return Promise.reject(
+                        new DestinySlackBotError(`Command: \`${this.getCommand()[0]}\` requires a valid \`${missingParameters.join('`,`')}\` be specified`, ERROR_TYPE.MISSING_PARAMETER)
+                    )
+                }
+                return Promise.resolve();
+            })
+            .then(() => {
+                if (!requiresAdmin) {
+                    return Promise.resolve();
+                }
+                return getUser(bot, message)
+                    .then(user => {
+                        if (!user.is_admin && !user.is_owner) {
+                            return Promise.reject(
+                                new DestinySlackBotError(`The command ${command.command} can only be invoked by an admin`, ERROR_TYPE.PERMISSION_DENIED)
+                            )
+                        }
+                    })
+            })
+            .then(() => Promise.resolve(privateProps.get(this).invoke(...arguments, command)))
+            .catch(error => BotAction.Error(bot, message, error))
+            .catch(error => {
+                console.log(`BotAction.Error failed`, error);
+            });
     }
 
     getDescription() {
@@ -79,7 +95,7 @@ export default class BotAction {
 
     getCommandParameters() {
         let paramRegex = privateProps.get(this).paramRegex,
-            values     = [];
+            values = [];
 
         for (let key in paramRegex) {
             values.push(key);
@@ -115,6 +131,10 @@ export default class BotAction {
                 bot.reply(message, error.context);
                 errorLevel = 'error';
                 break;
+            case ERROR_TYPE.MISSING_PARAMETER:
+                bot.reply(message, error.context);
+                errorLevel = 'error';
+                break;
             default:
                 errorLevel = 'error';
                 break;
@@ -129,7 +149,7 @@ function getUser(bot, message) {
         bot.api.users.info({
             user: message.user
         }, (something, response) => {
-            if(response.ok) {
+            if (response.ok) {
                 resolve(response.user);
             } else {
                 reject(`Response for users.info not ok`);

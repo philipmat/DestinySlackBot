@@ -8,7 +8,7 @@ let command = ['week'],
     description = 'returns trials stats for specified week.',
     paramRegex = {
         weekNumber: new CommandParamRegex(REGEX.NUMBER),
-        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
 function action(bot, message, command) {

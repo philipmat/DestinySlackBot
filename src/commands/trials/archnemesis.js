@@ -8,11 +8,18 @@ let command = ['archnemesis', 'arch nemesis'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns top 5 enemies played against more than once.',
     paramRegex = {
-        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
 function action(bot, message, command) {
-    return util.getPlayerId(command.gamerTag, command.membershipType, command)
+    let request;
+    if(command.gamerTag) {
+        request = util.getPlayerId(command.gamerTag, command.membershipType, command);
+    } else {
+        request = Promise.resolve(command.destiny_store);
+    }
+
+    return request
         .then(_getArchNemesis)
         .then(_processArchNemesis)
         .then(response => bot[command.replyFunctionName](message, response));

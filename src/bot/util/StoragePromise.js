@@ -25,7 +25,8 @@ class StoragePromiseItem {
         return new Promise((resolve, reject) => {
             controller.storage[group].all((err, data) => {
                 if(err) {
-                    reject(err);
+                    resolve([]);
+                    // reject(err);
                 } else {
                     resolve(data);
                 }
@@ -53,7 +54,8 @@ class StoragePromiseItem {
         return new Promise((resolve, reject) => {
             controller.storage[group].get(id, (err, data) => {
                 if(err) {
-                    reject(err);
+                    resolve({});
+                    // reject(err);
                 } else {
                     resolve(data);
                 }
