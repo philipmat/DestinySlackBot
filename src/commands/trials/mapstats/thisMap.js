@@ -12,7 +12,6 @@ let command = ['this map', 'thismap'],
     };
 
 function action(bot, message, command) {
-    console.log(command);
     return mapStats(MAP.CURRENT, command)
         .then(response => {
             return bot[command.replyFunctionName](message, response);

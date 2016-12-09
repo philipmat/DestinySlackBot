@@ -14,6 +14,5 @@ export default [
     thisWeek,
     trialsWeek,
     thisMap,
-    onMap,
     trialsMap
 ]

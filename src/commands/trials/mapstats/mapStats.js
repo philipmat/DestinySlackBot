@@ -14,17 +14,22 @@ export {
 };
 
 function getMapStats(map, command) {
+    let request;
     if (isNaN(map) || map < -1) {
-        return `${map} is not a valid id for map`;
+        return `${map} is not a valid number for week`;
+    }
+    if(command.gamerTag) {
+        request = util.getPlayerId(command.gamerTag, command.membershipType, command);
+    } else {
+        request = Promise.resolve(command.destiny_store);
     }
 
-    return util.getPlayerId(command.gamerTag, command.membershipType, command.command)
+    return request
         .then(player => _getSpecificMapStats(map, player))
         .then(_processMapStats);
 }
 
 function _getSpecificMapStats(mapId, player) {
-    console.log(mapId, player)
     return api.slack.thisMap({
         membershipId: player.membershipId,
         mapId
@@ -39,7 +44,6 @@ function _getSpecificMapStats(mapId, player) {
 }
 
 function _processMapStats(results) {
-    console.log(results)
     let {stats, player} = results;
 
     if (!stats || !+stats.matches) {

@@ -125,6 +125,42 @@ const TRIALS_MAPS = new Enumeration({
     EXODUS_BLUE: '4287936726'
 });
 
+const ACTIVITIES = new Enumeration({
+    284635225: "The Burning Shrine",
+    443057682: "Skyshock",
+    469270447: "Memento",
+    637046772: "Thieves' Den",
+    1448094960: "The Dungeons",
+    1478347980: "Campus Martius",
+    1709749894: "Skyline",
+    1719392441: "Crossroads",
+    1851417512: "The Drifter",
+    2037022373: "Vertigo",
+    2082069870: "The Anomaly",
+    2243240710: "Infinite Descent",
+    2332037858: "Widow's Court",
+    2430076725: "Blind Watch",
+    2507231345: "Frontier",
+    2680821721: "The Cauldron",
+    3053288711: "Floating Gardens",
+    3101475152: "Firebase Delphi",
+    3156370656: "Sector 618",
+    3277621970: "The Timekeeper",
+    3292667877: "Asylum",
+    3412406993: "Cathedral of Dusk",
+    3602734434: "Bannerfall",
+    3817155567: "Twilight Gap",
+    3848655103: "Black Shield",
+    3856604751: "First Light",
+    3918359338: "Icarus",
+    4105918304: "Last Exit",
+    4107311671: "Rusted Lands",
+    4163254808: "Shores of Time",
+    4200263342: "Bastion",
+    4260139097: "Pantheon",
+    4287936726: "Exodus Blue",
+});
+
 const SYSTEM_STRINGS = {
     EMPTY: '',
     INTERACTIVE: 'interactive'
@@ -152,5 +188,6 @@ export {
 
     ADVISOR,
 
-    TRIALS_MAPS
+    TRIALS_MAPS,
+    ACTIVITIES
 }

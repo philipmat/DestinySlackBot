@@ -12,7 +12,6 @@ let command = ['week'],
     };
 
 function action(bot, message, command) {
-    console.log(command)
     return weeklyStats(command.weekNumber, command)
         .then(response => {
             return bot[command.replyFunctionName](message, response);
