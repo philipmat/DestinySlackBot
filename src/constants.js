@@ -65,6 +65,7 @@ const COMMAND_GROUPING = new Enumeration({
     CRUCIBLE: 'crucible',
     DIRECTOR: 'director',
     GUNSMITH: 'gunsmith',
+    INFO: 'info',
     NONE: 'none',
     TRIALS: 'trials',
     TWITCH: 'twitch'
@@ -83,6 +84,7 @@ const REGEX = {
 
 const ERROR_TYPE = new Enumeration({
     GENERAL: 0,
+    MISSING_PARAMETER: 100,
     ACCESS_DENIED: 9999,
     ACCOUNT_FOUND_MULTIPLE_PLATFORMS: 1000,
     BAD_RESPONSE: 2000,
