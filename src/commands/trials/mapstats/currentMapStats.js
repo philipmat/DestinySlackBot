@@ -1,14 +1,14 @@
 import BotAction from '../../../bot/BotAction';
 import CommandParamRegex from '../../../bot/CommandParamRegex';
-import mapStats from './mapStats';
-import {MAP} from './mapStats';
+import mapStats from './stats';
+import {MAP} from './stats';
 import {COMMAND_GROUPING, REGEX} from '../../../constants';
 
-let command = ['this map', 'thismap'],
+let command = ['current map stats', 'current mapstats'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns trials stats for current map.',
     paramRegex = {
-        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
 function action(bot, message, command) {

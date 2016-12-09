@@ -110,7 +110,7 @@ const TRIALS_MAPS = new Enumeration({
     WIDOWS_COURT: '2332037858',
     BLIND_WATCH: '2430076725',
     FRONTIER: '2507231345',
-    COULDRON: '2680821721',
+    CAULDRON: '2680821721',
     FLOATING_GARDENS: '3053288711',
     FIREBASE_DELPHI: '3101475152',
     TIMEKEEPER: '3277621970',
@@ -161,6 +161,32 @@ const ACTIVITIES = new Enumeration({
     4287936726: "Exodus Blue",
 });
 
+const CALLOUT_MAPS = new Enumeration({
+    284635225: 'https://destinytrialsreport.com/assets/img/maps/the_burning_shrine.jpg',
+    // 469270447: '', // Memento
+    // 1851417512: '', // Drifter
+    2082069870: 'https://destinytrialsreport.com/assets/img/maps/the_anomaly.jpg',
+    2332037858: 'https://destinytrialsreport.com/assets/img/maps/widows_court.jpg',
+    2430076725: 'https://destinytrialsreport.com/assets/img/maps/blind_watch.jpg',
+    //2507231345: '', // Frontier
+    //2680821721: '', // Cauldron
+    //3053288711: '', // Floating Garden
+    3101475152: 'https://destinytrialsreport.com/assets/img/maps/firebase_delphi.jpg',
+    3277621970: 'https://destinytrialsreport.com/assets/img/maps/the_timekeeper.jpg',
+    3292667877: 'https://destinytrialsreport.com/assets/img/maps/asylum.jpg',
+    3602734434: 'https://destinytrialsreport.com/assets/img/maps/bannerfall.jpg',
+    3817155567: 'https://destinytrialsreport.com/assets/img/maps/twilight_gap.jpg',
+    //3848655103: '', // Black Shield
+    3856604751: 'https://destinytrialsreport.com/assets/img/maps/first_light.jpg',
+    //4105918304: '', // Last Exit
+    4107311671: 'https://destinytrialsreport.com/assets/img/maps/rusted_lands.jpg',
+    //4260139097: '', // Pantheon
+    4287936726: 'https://destinytrialsreport.com/assets/img/maps/exodus_blue.jpg',
+
+    4200263342: 'https://destinytrialsreport.com/assets/img/maps/bastion.jpg',
+    4163254808: 'https://destinytrialsreport.com/assets/img/maps/shores_of_time.jpg'
+});
+
 const SYSTEM_STRINGS = {
     EMPTY: '',
     INTERACTIVE: 'interactive'
@@ -188,6 +214,7 @@ export {
 
     ADVISOR,
 
+    CALLOUT_MAPS,
     TRIALS_MAPS,
     ACTIVITIES
 }

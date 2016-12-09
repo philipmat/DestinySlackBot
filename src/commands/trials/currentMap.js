@@ -5,7 +5,7 @@ import DestinySlackBotError from '../../bot/DestinySlackBotError';
 import {COMMAND_GROUPING, ERROR_TYPE} from '../../constants';
 import util from '../../util';
 
-let command     = ['current map'],
+let command     = ['map', 'current map'],
     respondsTo  = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns the most recent trials map';
 

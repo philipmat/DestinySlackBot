@@ -1,16 +1,19 @@
-import {COLOR} from '../../constants';
-
 export default formatAttachment;
 
-function formatAttachment({thumb_url, title = '', title_link, text = '', fields = [], fallback, color = COLOR.BROTHER_VANCE, footer, mrkdwn_in = ["text", "pretext", "title"]}) {
+function formatAttachment({actions, thumb_url, title = '', title_link, text = '', fields = [], fallback, color, footer, mrkdwn_in = ["text", "pretext", "title"]}) {
     let attachment = {
         title,
         text,
-        color,
         fields,
         mrkdwn_in
     };
 
+    if(color) {
+        attachment['color'] = color;
+    }
+    if(actions) {
+        attachment['actions'] = actions;
+    }
     if(title_link) {
         attachment['title_link'] = title_link;
     }

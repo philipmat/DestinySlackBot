@@ -1,69 +1,52 @@
-import api from '../../../destinytrialsreport-api-module';
-import {DestinyTrialsReportApiRequest} from '../../../destinytrialsreport-api-module';
+import BotAction from '../../../bot/BotAction';
+import CommandParamRegex from '../../../bot/CommandParamRegex';
+import mapStats from './stats';
+import {COMMAND_GROUPING, REGEX, TRIALS_MAPS, ACTIVITIES, PERSONA} from '../../../constants';
 import util from '../../../util';
-import {ICON} from '../../../constants';
 
-const MAP = {
-    CURRENT: 0,
-    PREVIOUS: -1
-};
+let command = ['stats by map', 'stats map', 'statsmap'],
+    respondsTo = ['direct_message', 'direct_mention', 'mention'],
+    description = 'returns trials stats for specified map.',
+    paramRegex = {
+        mapId: new CommandParamRegex(REGEX.NUMBER, false),
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT, false)
+    };
 
-export default getMapStats;
-export {
-    MAP
-};
-
-function getMapStats(map, command) {
-    let request;
-    if (isNaN(map) || map < -1) {
-        return `${map} is not a valid number for week`;
-    }
-    if(command.gamerTag) {
-        request = util.getPlayerId(command.gamerTag, command.membershipType, command);
-    } else {
-        request = Promise.resolve(command.destiny_store);
+function action(bot, message, command) {
+    if (!command.mapId) {
+        bot.reply(message, util.slack.personaResponse('', PERSONA.BROTHER_VANCE, _buildTrialsWeekInteractiveResponse(command)));
+        return;
     }
 
-    return request
-        .then(player => _getSpecificMapStats(map, player))
-        .then(_processMapStats);
-}
-
-function _getSpecificMapStats(mapId, player) {
-    return api.slack.thisMap({
-        membershipId: player.membershipId,
-        mapId
-    })
-        .then(DestinyTrialsReportApiRequest.unwrap)
+    return mapStats(command.mapId, command)
         .then(response => {
-            return {
-                stats: response,
-                player
-            }
+            return bot[command.replyFunctionName](message, response);
         });
 }
 
-function _processMapStats(results) {
-    let {stats, player} = results;
-
-    if (!stats || !+stats.matches) {
-        return `No matches found for ${player.displayName || player}`;
-    }
-    let platform  = util.Convert.membershipTypeToPlatform(stats.membershipType),
-        title     = `${player.displayName} on DestinyTrialsReport`,
-        titleLink = `http://my.trials.report/${platform}/${player.displayName}`;
-
-    let aggregateFields = util.slack.aggregateMatchStatsToFields(`Map`, stats.map, +stats.matches, +stats.losses, +stats.kd);
-
-    let attachment = util.slack.formatAttachment({
-        title,
-        title_link: titleLink,
-        thumb_url: ICON.FLAWLESS_YEAR_3,
-        fields: aggregateFields.fields,
-        fallback: aggregateFields.fallback
+function _buildTrialsWeekInteractiveResponse(command) {
+    return util.Convert.arrayToChunksOf(Object.keys(TRIALS_MAPS), 5).map(chunk => {
+        return {
+            title: ``,
+            callback_id: "trials stats by map",
+            attachment_type: 'default',
+            actions: chunk.map(id => {
+                return {
+                    "name": TRIALS_MAPS[id],
+                    "text": ACTIVITIES[TRIALS_MAPS[id]],
+                    "value": `trials stats by map ${TRIALS_MAPS[id]} ${command.gamerTag}`,
+                    "type": "button"
+                }
+            })
+        }
     });
-
-    let response = util.destiny.helpers.trialsSlackResponse('', attachment);
-
-    return response;
 }
+
+export default new BotAction({
+    command,
+    respondsTo,
+    action,
+    description,
+    grouping: COMMAND_GROUPING.TRIALS,
+    paramRegex
+})

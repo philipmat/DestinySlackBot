@@ -140,7 +140,11 @@ export default class BotAction {
                 break;
         }
 
+
         console[errorLevel](error.message ? error.message : error);
+        if(error.stack) {
+            console[errorLevel](error.stack);
+        }
     }
 }
 

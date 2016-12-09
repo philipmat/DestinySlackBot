@@ -23,7 +23,7 @@ function parse(message, paramRegex = {}) {
 
     if (platform && platform.length) {
         let _platform = platform[0].trim();
-        values.platform = _platform.toLowerCase();
+        values.platform = _platform.toLowerCase().startsWith('p') ? 'ps' : 'xbox';
         values.membershipType = Convert.platformToMembershipType(values.platform);
         message = message.replace(_platform, '').trim();
     }
