@@ -1,7 +1,7 @@
 import api from '../../../destinytrialsreport-api-module';
 import {DestinyTrialsReportApiRequest} from '../../../destinytrialsreport-api-module';
 import util from '../../../util';
-import {ICON} from '../../../constants';
+import {ICON, PERSONA} from '../../../constants';
 
 const WEEK = {
     CURRENT: 0,
@@ -64,7 +64,7 @@ function _processWeeklyStats(results) {
         fallback: aggregateFields.fallback
     });
 
-    let response = util.destiny.helpers.trialsSlackResponse('', attachment);
+    let response = util.slack.personaResponse('', PERSONA.BROTHER_VANCE, attachment);
 
     return response;
 }

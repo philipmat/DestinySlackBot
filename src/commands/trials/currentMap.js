@@ -2,7 +2,7 @@ import api from '../../destinytrialsreport-api-module';
 import {DestinyTrialsReportApiRequest} from '../../destinytrialsreport-api-module';
 import BotAction from '../../bot/BotAction';
 import DestinySlackBotError from '../../bot/DestinySlackBotError';
-import {COMMAND_GROUPING, ERROR_TYPE} from '../../constants';
+import {COMMAND_GROUPING, ERROR_TYPE, PERSONA} from '../../constants';
 import util from '../../util';
 
 let command     = ['map', 'current map'],
@@ -39,7 +39,7 @@ function _processCurrentMapResponse(result) {
             }
         ];
 
-    return util.destiny.helpers.trialsSlackResponse(text, attachments);
+    return util.slack.personaResponse(text, PERSONA.BROTHER_VANCE, attachments);
 }
 
 export default new BotAction({

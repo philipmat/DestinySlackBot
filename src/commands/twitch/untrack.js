@@ -2,7 +2,7 @@ import BotAction from '../../bot/BotAction';
 import DestinySlackBotError from '../../bot/DestinySlackBotError';
 import util from '../../util';
 import bot_util from '../../bot/util';
-import {COMMAND_GROUPING, COLOR, REGEX, ERROR_TYPE} from '../../constants';
+import {COMMAND_GROUPING, PERSONA, REGEX, ERROR_TYPE} from '../../constants';
 import CommandParamRegex from '../../bot/CommandParamRegex';
 
 let command       = ['untrack'],
@@ -34,8 +34,9 @@ function action(bot, message, command) {
                     new DestinySlackBotError(
                         `Twitch channel not found`,
                         ERROR_TYPE.ITEM_NOT_FOUND,
-                        util.twitch.helpers.twitchSlackResponse(
-                            `Unable to find a match for *${command.channel}* - Try executing \`twitch tracked\` to verify *${command.channel}* exists`
+                        util.slack.personaResponse(
+                            `Unable to find a match for *${command.channel}* - Try executing \`twitch tracked\` to verify *${command.channel}* exists`,
+                            PERSONA.TWITCH
                         )
                     )
                 )
@@ -46,8 +47,9 @@ function action(bot, message, command) {
             return _storage.save(team_data);
         })
         .then(() => {
-            return util.twitch.helpers.twitchSlackResponse(
-                `Channel *${command.channel}* successfully untracked`
+            return util.slack.personaResponse(
+                `Channel *${command.channel}* successfully untracked`,
+                PERSONA.TWITCH
             );
         })
         .then(response => bot[command.replyFunctionName](message, response));

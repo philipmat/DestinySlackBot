@@ -1,7 +1,7 @@
 import BotAction from '../../bot/BotAction';
 import util from '../../util';
 import bot_util from '../../bot/util';
-import {COMMAND_GROUPING, COLOR, REGEX} from '../../constants';
+import {COMMAND_GROUPING, COLOR, REGEX, PERSONA} from '../../constants';
 import CommandParamRegex from '../../bot/CommandParamRegex';
 
 let command     = ['live', 'online'],
@@ -34,12 +34,11 @@ function _processOnlineStreams(streams) {
         return util.slack.formatAttachment({
             title: `<https://twitch.tv/${streamer.channel}|${streamer.name}> |${stream.channel.status || 'No status'}|`,
             text: `*Game*: ${stream.game} *Viewers*: ${stream.viewers} *Views*: ${stream.channel.views}`,
-            thumb_url: stream.preview.medium,
-            color: COLOR.TWITCH
+            thumb_url: stream.preview.medium
         });
     });
 
-    return util.twitch.helpers.twitchSlackResponse('*Twitch Online:*', attachments);
+    return util.slack.personaResponse('*Twitch Online:*', PERSONA.TWITCH, attachments);
 }
 
 export default new BotAction({

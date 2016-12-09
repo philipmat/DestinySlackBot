@@ -1,6 +1,6 @@
 import BotAction from '../../bot/BotAction';
 import util from '../../util';
-import {COMMAND_GROUPING, ADVISOR} from '../../constants';
+import {COMMAND_GROUPING, ADVISOR, PERSONA} from '../../constants';
 
 let command = ['weekly heroic', 'heroic'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
@@ -25,7 +25,7 @@ function _processActivity(activity, skullIndexes) {
         attachments = attachments.concat(activity.skulls.map(util.destiny.helpers.skullToAttachment));
     }
 
-    return util.destiny.helpers.directorSlackResponse('*Weekly Heroic Strikes*', attachments);
+    return util.slack.personaResponse('*Weekly Heroic Strikes*', PERSONA.CAYDE_6, attachments);
 }
 export default new BotAction({
     command,

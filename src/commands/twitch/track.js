@@ -2,7 +2,7 @@ import BotAction from '../../bot/BotAction';
 import DestinySlackBotError from '../../bot/DestinySlackBotError';
 import util from '../../util';
 import bot_util from '../../bot/util';
-import {COMMAND_GROUPING, COLOR, REGEX, ERROR_TYPE} from '../../constants';
+import {COMMAND_GROUPING, PERSONA, REGEX, ERROR_TYPE} from '../../constants';
 import CommandParamRegex from '../../bot/CommandParamRegex';
 import twitch from 'mrdandandan-twitch-module';
 
@@ -27,7 +27,7 @@ function action(bot, message, command) {
                             new DestinySlackBotError(
                                 `Twitch invalid channel response`,
                                 ERROR_TYPE.BAD_RESPONSE,
-                                util.twitch.helpers.twitchSlackResponse(`Specified channel *${command.channel}* is invalid`)
+                                util.slack.personaResponse(`Specified channel *${command.channel}* is invalid`, PERSONA.TWITCH)
                             )
                         );
                     default:
@@ -35,7 +35,7 @@ function action(bot, message, command) {
                             new DestinySlackBotError(
                                 `Twitch error response`,
                                 ERROR_TYPE.BAD_RESPONSE,
-                                util.twitch.helpers.twitchSlackResponse(`There was an error looking up *${command.channel}*\n${response.error.message}`)
+                                util.slack.personaResponse(`There was an error looking up *${command.channel}*\n${response.error.message}`, PERSONA.TWITCH)
                             )
                         );
                 }
@@ -55,8 +55,9 @@ function action(bot, message, command) {
                     new DestinySlackBotError(
                         `Twitch channel already tracked`,
                         ERROR_TYPE.ITEM_EXISTS,
-                        util.twitch.helpers.twitchSlackResponse(
+                        util.slack.personaResponse(
                             `Channel *${command.channel}* is already being tracked`,
+                            PERSONA.TWITCH
                         )
                     )
                 );
@@ -73,7 +74,7 @@ function action(bot, message, command) {
             let streamers = team_data.twitch_streamers = team_data.twitch_streamers || [],
                 text = `Twitch channel *${streamers[streamers.length - 1].name}* is now being tracked`;
 
-            return util.twitch.helpers.twitchSlackResponse(text);
+            return util.slack.personaResponse(text, PERSONA.TWITCH);
         })
         .then(response => bot[command.replyFunctionName](message, response));
 }

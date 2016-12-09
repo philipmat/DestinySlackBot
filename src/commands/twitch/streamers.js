@@ -1,7 +1,7 @@
 import BotAction from '../../bot/BotAction';
 import util from '../../util';
 import bot_util from '../../bot/util';
-import {COMMAND_GROUPING, COLOR} from '../../constants';
+import {COMMAND_GROUPING, COLOR, PERSONA} from '../../constants';
 
 let command     = ['streamers', 'tracked'],
     respondsTo  = ['direct_message', 'direct_mention', 'mention'],
@@ -16,23 +16,24 @@ function action(bot, message, command) {
             return team_data.twitch_streamers || [];
         })
         .then(streamers => {
-            return util.twitch.helpers.twitchSlackResponse(
+            return util.slack.personaResponse(
                 '*Tracked Twitch Streams*',
+                PERSONA.TWITCH,
                 util.slack.formatAttachment({
-                    text: streamers.sort((a, b) => {
-                        let _a = a.name.toLowerCase(),
-                            _b = b.name.toLowerCase();
-                        if(_a < _b) {
-                            return -1;
-                        }
-                        if(_a > _b) {
-                            return 1;
-                        }
-                        return 0;
-                    }).map(
-                        streamer => `*Name:* ${streamer.name}\n*Channel:* ${streamer.channel}\n`).join('\n'),
-                    color: COLOR.TWITCH
-                })
+                        text: streamers.sort((a, b) => {
+                            let _a = a.name.toLowerCase(),
+                                _b = b.name.toLowerCase();
+                            if (_a < _b) {
+                                return -1;
+                            }
+                            if (_a > _b) {
+                                return 1;
+                            }
+                            return 0;
+                        }).map(
+                            streamer => `*Name:* ${streamer.name}\n*Channel:* ${streamer.channel}\n`).join('\n')
+                    }
+                )
             )
         })
         .then(response => bot[command.replyFunctionName](message, response));
