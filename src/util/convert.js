@@ -18,7 +18,7 @@ export default class Convert {
     static platformToMembershipType(platform) {
         return membershipType[platform];
     }
-    static inChunksOf(array, size) {
+    static arrayToChunksOf(array, size) {
         var sets = [];
         var chunks = array.length / size;
 

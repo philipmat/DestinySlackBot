@@ -13,7 +13,7 @@
     "api-request-base": "0.0.3",
     "botkit": "latest",
     "es6-promise": "^3.3.1",
-    "mrdandandan-destiny-api-module": "0.0.2",
+    "mrdandandan-destiny-api-module": "0.0.3",
     "mrdandandan-twitch-module": "0.0.5",
     "request-promise": "latest"
   },

@@ -25,7 +25,7 @@ function action(bot, message, command) {
 }
 
 function _buildTrialsWeekInteractiveResponse(command) {
-    return util.Convert.inChunksOf(Object.keys(TRIALS_MAPS), 5).map(chunk => {
+    return util.Convert.arrayToChunksOf(Object.keys(TRIALS_MAPS), 5).map(chunk => {
         return {
             title: ``,
             callback_id: "trials map",
