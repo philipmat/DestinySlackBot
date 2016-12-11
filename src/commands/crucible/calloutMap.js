@@ -36,8 +36,7 @@ function _buildInteractiveMapSelector(mapIds) {
                 return {
                     name: ACTIVITIES[id],
                     text: ACTIVITIES[id],
-                    callback_id: `crucible callout map`,
-                    value: `crucible callout map ${ACTIVITIES[id]}`,
+                    value: `crucible callout map ${id}`,
                     type: 'button'
                 }
             })
@@ -46,11 +45,12 @@ function _buildInteractiveMapSelector(mapIds) {
 
     let firstRow = true;
     attachments = actions.map(chunk => {
-        let attachment = util.slack.formatAttachment({
+        let attachment = {
             text: firstRow ? '*Select a map for callouts*' : SYSTEM_STRINGS.EMPTY,
+            callback_id: `crucible callout map`,
             actions: chunk,
             fallback: `Interactions not supported`
-        });
+        };
         firstRow = false;
 
         return attachment;
