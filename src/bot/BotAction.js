@@ -112,7 +112,8 @@ export default class BotAction {
         switch (error.type) {
             case ERROR_TYPE.ACCOUNT_FOUND_MULTIPLE_PLATFORMS:
                 let interactiveResponse = util.slack.interactivePlatformResponse(error.context.parameters.displayName, error.context.parameters.command);
-                bot.reply(message, interactiveResponse);
+
+                bot[error.context.parameters.command.replyFunctionName](message, interactiveResponse);
                 errorLevel = 'warn';
                 break;
             case ERROR_TYPE.ACCESS_DENIED:
@@ -142,7 +143,7 @@ export default class BotAction {
 
 
         console[errorLevel](error.message ? error.message : error);
-        if(error.stack) {
+        if(errorLevel === 'error' && error.stack) {
             console[errorLevel](error.stack);
         }
     }
