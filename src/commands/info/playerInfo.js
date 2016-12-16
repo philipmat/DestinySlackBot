@@ -4,7 +4,7 @@ import destinyApi from 'mrdandandan-destiny-api-module';
 
 import CommandParamRegex from '../../bot/CommandParamRegex';
 
-import {COMMAND_GROUPING, REGEX, CLASS_HASH, RACE_HASH, GENDER_HASH, COLOR} from '../../constants';
+import {COMMAND_GROUPING, REGEX, CLASS_HASH, DAMAGE_TYPE_HASH, RACE_HASH, GENDER_HASH, COLOR} from '../../constants';
 
 let command = ['destiny player'],
     respondsTo = ['direct_mention', 'direct_message'],
@@ -27,19 +27,41 @@ function action(bot, message, command) {
 }
 
 function getSummary(player) {
+    let {membershipId, membershipType} = player;
     return destinyApi.account.summary({
-        membershipType: player.membershipType,
-        membershipId: player.membershipId
+        membershipId,
+        membershipType
     })
+        .then(summary => {
+            let inventoryRequests = [];
+
+            summary.characters.forEach(character => {
+                inventoryRequests.push(
+                    destinyApi.account.characterInventory({
+                        characterId: character.characterBase.characterId,
+                        membershipId,
+                        membershipType
+                    })
+                        .then(inventory => {
+                            character.subclass = inventory.buckets.Equippable[0].items[0];
+                        })
+                )
+            });
+
+            return Promise.all(inventoryRequests)
+                .then(() => summary);
+        });
 }
 
 function buildResponse(summary) {
     let {characters} = summary,
-        i = 0,
-        colors = [COLOR.ARC, COLOR.VOID, COLOR.SOLAR];
+        damageTypeColor = {};
+    damageTypeColor[DAMAGE_TYPE_HASH.ARC] = COLOR.ARC;
+    damageTypeColor[DAMAGE_TYPE_HASH.SOLAR] = COLOR.SOLAR;
+    damageTypeColor[DAMAGE_TYPE_HASH.VOID] = COLOR.VOID;
 
     let attachments = characters.map(character => {
-        let {characterBase, emblemPath, characterLevel} = character;
+        let {characterBase, emblemPath, characterLevel, subclass} = character;
         let {
             dateLastPlayed,
             minutesPlayedThisSession,
@@ -78,7 +100,7 @@ function buildResponse(summary) {
                     short: true
                 }
             ],
-            color: colors[i++],
+            color: damageTypeColor[subclass.damageTypeHash],
             thumb_url: `http://bungie.net${emblemPath}`
         })
     });
