@@ -125,6 +125,23 @@ const TRIALS_MAPS = new Enumeration({
     EXODUS_BLUE: '4287936726'
 });
 
+const CLASS_HASH = new Enumeration({
+    Hunter: 671679327,
+    Titan: 3655393761,
+    Warlock: 2271682572
+});
+
+const RACE_HASH = new Enumeration({
+    Awoken: 2803282938,
+    Exo: 898834093,
+    Human: 3887404748
+});
+
+const GENDER_HASH = new Enumeration({
+    Male: 3111576190,
+    Female: 2204441813
+});
+
 const ACTIVITIES = new Enumeration({
     284635225: "The Burning Shrine",
     443057682: "Skyshock",
@@ -216,5 +233,9 @@ export {
 
     CALLOUT_MAPS,
     TRIALS_MAPS,
-    ACTIVITIES
+    ACTIVITIES,
+
+    CLASS_HASH,
+    GENDER_HASH,
+    RACE_HASH
 }
