@@ -39,7 +39,7 @@ export default class Bot {
             actions    = privateProps.get(this).actions;
 
         actions.push(action);
-        controller.hears(action.getCommand(), action.getRespondsTo(), action.invoke.bind(action));
+        controller.hears(action.getCommand().map(command => `^${command}`), action.getRespondsTo(), action.invoke.bind(action));
     }
 
     // TODO: Remove this later.  Used for testing stuff atm
@@ -140,7 +140,7 @@ function _loadBasicInteractions() {
         bot.replyInteractive(message, '_Loading..._');
     });
 
-    controller.hears(botCommands.help.getCommand(), botCommands.help.getRespondsTo(), (bot, message) => {
+    controller.hears(botCommands.help.getCommand().map(command => `^${command}`), botCommands.help.getRespondsTo(), (bot, message) => {
         botCommands.help.invoke(bot, message, this.getActions());
     });
 }

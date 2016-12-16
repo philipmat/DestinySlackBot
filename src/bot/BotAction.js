@@ -126,11 +126,11 @@ export default class BotAction {
                 break;
             case ERROR_TYPE.ITEM_EXISTS:
                 bot.reply(message, error.context);
-                errorLevel = 'error';
+                errorLevel = 'warn';
                 break;
             case ERROR_TYPE.ITEM_NOT_FOUND:
                 bot.reply(message, error.context);
-                errorLevel = 'error';
+                errorLevel = 'warn';
                 break;
             case ERROR_TYPE.MISSING_PARAMETER:
                 bot.reply(message, error.context);
