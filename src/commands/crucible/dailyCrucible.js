@@ -1,6 +1,6 @@
 import BotAction from '../../bot/BotAction';
 import util from '../../util';
-import {COMMAND_GROUPING, ADVISOR} from '../../constants';
+import {COMMAND_GROUPING, ADVISOR, PERSONA} from '../../constants';
 
 let command = ['daily crucible', 'daily pvp', 'daily'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
@@ -20,7 +20,7 @@ function _processActivity(activity) {
         attachments = attachments.concat(activity.skulls.map(util.destiny.helpers.skullToAttachment));
     }
 
-    return util.destiny.helpers.crucibleSlackResponse('*Daily Crucible*', attachments);
+    return util.slack.personaResponse('*Daily Crucible*', PERSONA.LORD_SHAXX, attachments);
 }
 export default new BotAction({
     command,

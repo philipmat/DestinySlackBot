@@ -1,18 +1,18 @@
 import BotAction from '../../../bot/BotAction';
 import CommandParamRegex from '../../../bot/CommandParamRegex';
-import weeklyStats from './weeklyStats';
-import {WEEK} from './weeklyStats';
+import mapStats from './stats';
+import {MAP} from './stats';
 import {COMMAND_GROUPING, REGEX} from '../../../constants';
 
-let command = ['this week', 'thisweek'],
+let command = ['current map stats', 'current mapstats'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
-    description = 'returns trials stats for current week.',
+    description = 'returns trials stats for current map.',
     paramRegex = {
         gamerTag: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
 function action(bot, message, command) {
-    return weeklyStats(WEEK.CURRENT, command)
+    return mapStats(MAP.CURRENT, command)
         .then(response => {
             return bot[command.replyFunctionName](message, response);
         });

@@ -119,7 +119,8 @@ let command = ['<the base command/commands>'],
     paramRegex = {
         // Parameters to be parsed out of user input, regex-based
         gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
-    };
+    },
+    requiresAdmin = true;
 
 // Action to be invoked when command is entered
 function action(bot, message, command) {
@@ -144,8 +145,14 @@ export default new BotAction({
 
 *Add the new command to the index file in its directory*
 
-
+### Errors
 Basic error handling happens at the point where the action is invoked `./Bot/BotAction.js`_.invoke_ which is the reason we want to return a promise from the action itself.
 
 A good example of this is `./util/getPlayerId` which queries Bungie for a `membershipId` based on a provided gamerTag.  If there is a match for this gamertag on multiple platforms, we need to let the user specify the platform.
 To do this, we return `Promise.reject()` with an error describing this and the default error handling picks it up and responds with an interactive message to allow the user to select a platform. 
+
+Use `return Promise.reject` at any point to let the bot know the action encountered an error.
+Always reject using `DestinySlackBotError(message, type [, context])` which can be imported from `./bot/DestinySlackBotError` which should play nicely with the built in error handling/printing.
+
+A constant is available for `type` - `ERROR_TYPE`
+

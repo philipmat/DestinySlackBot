@@ -1,6 +1,7 @@
 import {slackbot} from 'botkit';
-import {CONFIG} from '../constants';
+import {CONFIG, SYSTEM_STRINGS} from '../constants';
 import botCommands from './commands';
+import TwitchAnnouncer from '../util/twitch/TwitchAnnouncer';
 
 let privateProps = new WeakMap();
 
@@ -20,7 +21,8 @@ export default class Bot {
         privateProps.set(this, {
             controller,
             bots: {},
-            actions: []
+            actions: [],
+            twitchAnnouncer: new TwitchAnnouncer()
         });
     }
 
@@ -37,7 +39,7 @@ export default class Bot {
             actions    = privateProps.get(this).actions;
 
         actions.push(action);
-        controller.hears(action.getCommand(), action.getRespondsTo(), action.invoke.bind(action));
+        controller.hears(action.getCommand().map(command => `^${command}`), action.getRespondsTo(), action.invoke.bind(action));
     }
 
     // TODO: Remove this later.  Used for testing stuff atm
@@ -56,7 +58,7 @@ export default class Bot {
             }
             bot.startRTM(err => {
                 if (!err) {
-                    _trackBot(bot, bots);
+                    _trackBot.call(this, bot, bots);
                 }
 
                 bot.startPrivateConversation({user: config.createdBy}, (err, convo) => {
@@ -84,7 +86,10 @@ export default class Bot {
 }
 
 function _trackBot(bot, bots) {
+    let twitchAnnouncer = privateProps.get(this).twitchAnnouncer;
+
     bots[bot.config.token] = bot;
+    twitchAnnouncer.loadBot(bot);
 }
 
 function _startWebServer() {
@@ -116,7 +121,12 @@ function _loadBasicInteractions() {
     });
 
     controller.on('interactive_message_callback', (bot, message) => {
-        if(message.callback_id === 'help') {
+        // If the message originated in a DM, gtfo
+        if(message.channel.startsWith('D')) {
+            return;
+        }
+
+        if (message.callback_id === 'help') {
             botCommands.help.invoke(bot, message, this.getActions());
             return;
         }
@@ -130,7 +140,7 @@ function _loadBasicInteractions() {
         bot.replyInteractive(message, '_Loading..._');
     });
 
-    controller.hears(botCommands.help.getCommand(), botCommands.help.getRespondsTo(), (bot, message) => {
+    controller.hears(botCommands.help.getCommand().map(command => `^${command}`), botCommands.help.getRespondsTo(), (bot, message) => {
         botCommands.help.invoke(bot, message, this.getActions());
     });
 }
@@ -139,7 +149,7 @@ function _connectExistingTeams() {
     let controller = privateProps.get(this).controller,
         bots       = privateProps.get(this).bots;
 
-    controller.storage.teams.all(function (err, teams) {
+    controller.storage.teams.all((err, teams) => {
 
         if (err) {
             throw new Error(err);
@@ -148,15 +158,14 @@ function _connectExistingTeams() {
         // connect all teams with bots up to slack!
         for (var t  in teams) {
             if (teams[t].bot) {
-                controller.spawn(teams[t]).startRTM(function (err, bot) {
+                controller.spawn(teams[t]).startRTM((err, bot) => {
                     if (err) {
                         console.log('Error connecting bot to Slack:', err);
                     } else {
-                        _trackBot(bot, bots);
+                        _trackBot.call(this, bot, bots);
                     }
                 });
             }
         }
-
     });
 }

@@ -3,21 +3,20 @@ import {DestinyTrialsReportApiRequest} from '../../../destinytrialsreport-api-mo
 import util from '../../../util';
 import {ICON, PERSONA} from '../../../constants';
 
-const WEEK = {
+const MAP = {
     CURRENT: 0,
     PREVIOUS: -1
 };
 
-export default getWeeklyStats;
+export default getMapStats;
 export {
-    WEEK
+    MAP
 };
 
-function getWeeklyStats(week, command) {
-    let weekNumber = +week,
-        request;
-    if (isNaN(weekNumber) || weekNumber < -1 /* || weekNumber > MAX_WEEK_NUMBER*/) {
-        return `${week} is not a valid number for week`;
+function getMapStats(map, command) {
+    let request;
+    if (isNaN(map) || map < -1) {
+        return `${map} is not a valid number for week`;
     }
     if(command.gamerTag) {
         request = util.getPlayerId(command.gamerTag, command.membershipType, command);
@@ -26,14 +25,14 @@ function getWeeklyStats(week, command) {
     }
 
     return request
-        .then(player => _getSpecificWeeklyStats(weekNumber, player))
-        .then(_processWeeklyStats);
+        .then(player => _getSpecificMapStats(map, player))
+        .then(_processMapStats);
 }
 
-function _getSpecificWeeklyStats(weekNumber, player) {
-    return api.slack.trialsWeek({
+function _getSpecificMapStats(mapId, player) {
+    return api.slack.thisMap({
         membershipId: player.membershipId,
-        weekNumber
+        mapId
     })
         .then(DestinyTrialsReportApiRequest.unwrap)
         .then(response => {
@@ -44,7 +43,7 @@ function _getSpecificWeeklyStats(weekNumber, player) {
         });
 }
 
-function _processWeeklyStats(results) {
+function _processMapStats(results) {
     let {stats, player} = results;
 
     if (!stats || !+stats.matches) {

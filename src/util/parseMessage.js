@@ -1,41 +1,53 @@
-import util from './index';
+import Convert from './convert';
+import {REGEX, SLACK_REPLY_FUNCTION_NAME, SYSTEM_STRINGS} from '../constants';
 
 export default {
     parse,
     parseAsync
 };
 
-const PLATFORM_REGEX = new RegExp(/(xbox|xb1|xb|playstation|ps4|ps)/g);
-
 function parse(message, paramRegex = {}) {
     // ¿¿
-    let command = message.match ? message.match[0] : message.callback_id,
-        replyFunctionName = _getReplyFunctionName(message.type);
+    let command           = message.text,
+        baseCommand       = message.match ? message.match[0] : message.callback_id,
+        replyFunctionName = _getReplyFunctionName(message);
 
-    message = message.text.replace(command, '').trim().toLowerCase();
+    message = message.text.replace(baseCommand, SYSTEM_STRINGS.EMPTY).trim();
 
-    let platform = message.match(PLATFORM_REGEX),
-        values = {
+    let platform = message.match(REGEX.PLATFORM),
+        values   = {
+            baseCommand,
             command,
             replyFunctionName
         };
 
     if (platform && platform.length) {
-        values.platform = platform[0].trim();
-        values.membershipType = util.Convert.platformToMembershipType(values.platform);
-        message = message.replace(values.platform, '');
+        let _platform = platform[0].trim();
+        values.platform = _platform.toLowerCase().startsWith('p') ? 'ps' : 'xbox';
+        values.membershipType = Convert.platformToMembershipType(values.platform);
+        message = message.replace(_platform, '').trim();
     }
 
     for (let key in paramRegex) {
         let regex = paramRegex[key].pattern,
+            match,
+            index;
+
+        // TODO: Kinda rigged, should refactor to something not stupid later
+        if (regex.toString().indexOf('(.*?)') !== -1) {
+            match = regex.exec(message);
+            index = 1;
+        } else {
             match = message.match(regex);
+            index = 0;
+        }
 
         if (!match || !match.length) {
             values[key] = undefined;
             continue;
         }
 
-        values[key] = match[0].trim();
+        values[key] = match[index].trim();
         message = message.replace(values[key], '');
     }
 
@@ -46,11 +58,10 @@ function parseAsync(message, paramRegex = {}) {
     return Promise.resolve(parse(message, paramRegex));
 }
 
-function _getReplyFunctionName(messageType) {
-    switch (messageType) {
-        case 'interactive_message_callback':
-            return 'replyInteractive';
-        default:
-            return 'reply';
+function _getReplyFunctionName(message) {
+    if (message.type === 'interactive_message_callback' ||
+        (message.hasOwnProperty('callback_id') && message.channel.startsWith('D'))) {
+        return SLACK_REPLY_FUNCTION_NAME.REPLY_INTERACTIVE;
     }
+    return SLACK_REPLY_FUNCTION_NAME.REPLY;
 }

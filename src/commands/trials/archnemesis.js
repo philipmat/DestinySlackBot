@@ -2,17 +2,24 @@ import api from '../../destinytrialsreport-api-module';
 import util from '../../util';
 import BotAction from '../../bot/BotAction';
 import CommandParamRegex from '../../bot/CommandParamRegex';
-import {COMMAND_GROUPING, REGEX} from '../../constants';
+import {COMMAND_GROUPING, REGEX, PERSONA} from '../../constants';
 
 let command = ['archnemesis', 'arch nemesis'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'returns top 5 enemies played against more than once.',
     paramRegex = {
-        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT)
+        gamerTag: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
 function action(bot, message, command) {
-    return util.getPlayerId(command.gamerTag, command.membershipType, command.command)
+    let request;
+    if(command.gamerTag) {
+        request = util.getPlayerId(command.gamerTag, command.membershipType, command);
+    } else {
+        request = Promise.resolve(command.destiny_store);
+    }
+
+    return request
         .then(_getArchNemesis)
         .then(_processArchNemesis)
         .then(response => bot[command.replyFunctionName](message, response));
@@ -49,7 +56,7 @@ function _processArchNemesis(results) {
         }));
     }
 
-    response = util.destiny.helpers.trialsSlackResponse(title, attachments);
+    response = util.slack.personaResponse(title, PERSONA.BROTHER_VANCE, attachments);
 
     return response;
 }

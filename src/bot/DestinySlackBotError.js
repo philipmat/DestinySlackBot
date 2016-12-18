@@ -2,7 +2,7 @@ import {ERROR_TYPE} from '../constants';
 
 export default DestinySlackBotError;
 
-function DestinySlackBotError(message, type, context = {}) {
+function DestinySlackBotError(message, type, context = {text: message}) {
     this.name = `DestinySlackBotError`;
     this.message = message || `An error occurred with the bot`;
     this.stack = (new Error()).stack;

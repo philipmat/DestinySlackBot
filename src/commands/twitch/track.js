@@ -1,28 +1,66 @@
 import BotAction from '../../bot/BotAction';
+import DestinySlackBotError from '../../bot/DestinySlackBotError';
 import util from '../../util';
 import bot_util from '../../bot/util';
-import {COMMAND_GROUPING, COLOR, REGEX} from '../../constants';
+import {COMMAND_GROUPING, PERSONA, REGEX, ERROR_TYPE} from '../../constants';
 import CommandParamRegex from '../../bot/CommandParamRegex';
+import twitch from 'mrdandandan-twitch-module';
 
-let command     = ['track', 'add'],
-    respondsTo  = ['direct_message', 'direct_mention', 'mention'],
-    description = 'Add a new twitch channel to be tracked [ADMIN ONLY]',
-    paramRegex  = {
+let command       = ['track', 'add'],
+    respondsTo    = ['direct_message', 'direct_mention', 'mention'],
+    description   = 'Add a new twitch channel to be tracked [ADMIN ONLY]',
+    paramRegex    = {
         channel: new CommandParamRegex(REGEX.FIRST_WORD),
         channelName: new CommandParamRegex(REGEX.ANY_TEXT, false)
     },
     requiresAdmin = true;
 
 function action(bot, message, command) {
-    return bot_util.storage.get(bot.botkit.storage.teams, message.team)
+    let _storage = bot_util.StoragePromise.init(bot.botkit).teams;
+
+    return twitch.channel(command.channel)
+        .catch(response => {
+            if (response.error) {
+                switch (response.error.status) {
+                    case 404:
+                        return Promise.reject(
+                            new DestinySlackBotError(
+                                `Twitch invalid channel response`,
+                                ERROR_TYPE.BAD_RESPONSE,
+                                util.slack.personaResponse(`Specified channel *${command.channel}* is invalid`, PERSONA.TWITCH)
+                            )
+                        );
+                    default:
+                        return Promise.reject(
+                            new DestinySlackBotError(
+                                `Twitch error response`,
+                                ERROR_TYPE.BAD_RESPONSE,
+                                util.slack.personaResponse(`There was an error looking up *${command.channel}*\n${response.error.message}`, PERSONA.TWITCH)
+                            )
+                        );
+                }
+            }
+        })
+        .then(() => {
+            return _storage.get(message.team)
+        })
         .then(team_data => {
-            let streamers = team_data.streamers = team_data.streamers || [];
+            let streamers = team_data.twitch_streamers = team_data.twitch_streamers || [];
 
             let exists = streamers.some(streamer => {
                 return streamer.channel.toLowerCase() === command.channel.toLowerCase();
             });
-            if(exists) {
-                return Promise.reject(`Channel: ${command.channel} is already being tracked`);
+            if (exists) {
+                return Promise.reject(
+                    new DestinySlackBotError(
+                        `Twitch channel already tracked`,
+                        ERROR_TYPE.ITEM_EXISTS,
+                        util.slack.personaResponse(
+                            `Channel *${command.channel}* is already being tracked`,
+                            PERSONA.TWITCH
+                        )
+                    )
+                );
             }
             let streamer = {
                 channel: command.channel,
@@ -30,23 +68,15 @@ function action(bot, message, command) {
             };
             streamers.push(streamer);
 
-            return bot_util.storage.save(bot.botkit.storage.teams, team_data);
-        });
-}
+            return _storage.save(team_data);
+        })
+        .then(team_data => {
+            let streamers = team_data.twitch_streamers = team_data.twitch_streamers || [],
+                text = `Twitch channel *${streamers[streamers.length - 1].name}* is now being tracked`;
 
-function _processOnlineStreams(streams) {
-    let attachments = streams.map(s => {
-        let {streamer, stream} = s;
-
-        return util.slack.formatAttachment({
-            title: `<https://twitch.tv/${streamer.channel}|${streamer.name}> |${stream.channel.status || 'No status'}|`,
-            text: `*Game*: ${stream.game} *Viewers*: ${stream.viewers} *Views*: ${stream.channel.views}`,
-            thumb_url: stream.preview.medium,
-            color: COLOR.TWITCH
-        });
-    });
-
-    return util.twitch.helpers.twitchSlackResponse('*Twitch Online:*', attachments);
+            return util.slack.personaResponse(text, PERSONA.TWITCH);
+        })
+        .then(response => bot[command.replyFunctionName](message, response));
 }
 
 export default new BotAction({

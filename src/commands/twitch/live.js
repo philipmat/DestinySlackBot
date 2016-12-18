@@ -1,7 +1,7 @@
 import BotAction from '../../bot/BotAction';
 import util from '../../util';
 import bot_util from '../../bot/util';
-import {COMMAND_GROUPING, COLOR, REGEX} from '../../constants';
+import {COMMAND_GROUPING, COLOR, REGEX, PERSONA} from '../../constants';
 import CommandParamRegex from '../../bot/CommandParamRegex';
 
 let command     = ['live', 'online'],
@@ -11,31 +11,13 @@ let command     = ['live', 'online'],
         channel: new CommandParamRegex(REGEX.ANY_TEXT, false)
     };
 
-let _streamers = [
-    {
-        name: 'Wish You Luck',
-        channel: 'WishYouLuckk'
-    },
-    {
-        name: 'SayNoToRage',
-        channel: 'SayNoToRage'
-    },
-    {
-        name: 'TrueVanguard',
-        channel: 'thetruevanguard'
-    },
-    {
-        name: 'Luminosity',
-        channel: 'luminosity'
-    }
-];
-
 function action(bot, message, command) {
+    let _storage = bot_util.StoragePromise.init(bot.botkit).teams;
     let promise = command.channel ?
         Promise.resolve([{name: command.channel, channel: command.channel}]) :
-        bot_util.storage.get(bot.botkit.storage.teams, message.team)
+        _storage.get(message.team)
             .then(team_data => {
-                return team_data.streamers || [];
+                return team_data.twitch_streamers || [];
             });
 
 
@@ -52,12 +34,11 @@ function _processOnlineStreams(streams) {
         return util.slack.formatAttachment({
             title: `<https://twitch.tv/${streamer.channel}|${streamer.name}> |${stream.channel.status || 'No status'}|`,
             text: `*Game*: ${stream.game} *Viewers*: ${stream.viewers} *Views*: ${stream.channel.views}`,
-            thumb_url: stream.preview.medium,
-            color: COLOR.TWITCH
+            thumb_url: stream.preview.medium
         });
     });
 
-    return util.twitch.helpers.twitchSlackResponse('*Twitch Online:*', attachments);
+    return util.slack.personaResponse('*Twitch Online:*', PERSONA.TWITCH, attachments);
 }
 
 export default new BotAction({
