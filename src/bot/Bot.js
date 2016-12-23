@@ -8,7 +8,7 @@ let privateProps = new WeakMap();
 export default class Bot {
     constructor() {
         if (process.env.ENV && process.env.ENV === 'production') {
-            var mysqlStorage = require('botkit-storage-mysql')({
+            var mysqlStorage = require('./botkit-storage-mysql')({
                 host:       process.env.MYSQL_HOST,
                 user:       process.env.MYSQL_USER,
                 password:   process.env.MYSQL_PASSWORD,
@@ -19,25 +19,38 @@ export default class Bot {
                 storage: mysqlStorage,
                 interactive_replies: true
             });
+
+            controller.configureSlackApp({
+                clientId: process.env.clientId || CONFIG.SLACK.CLIENT_ID,
+                clientSecret: process.env.clientSecret || CONFIG.SLACK.CLIENT_SECRET,
+                scopes: ['bot']
+            });
+
+            privateProps.set(this, {
+                controller,
+                bots: {},
+                actions: [],
+                twitchAnnouncer: new TwitchAnnouncer()
+            });
         } else {
             let controller = slackbot({
                 json_file_store: './db_slackbutton_bot/',
                 interactive_replies: true
             });
+
+            controller.configureSlackApp({
+                clientId: process.env.clientId || CONFIG.SLACK.CLIENT_ID,
+                clientSecret: process.env.clientSecret || CONFIG.SLACK.CLIENT_SECRET,
+                scopes: ['bot']
+            });
+
+            privateProps.set(this, {
+                controller,
+                bots: {},
+                actions: [],
+                twitchAnnouncer: new TwitchAnnouncer()
+            });
         }
-
-        controller.configureSlackApp({
-            clientId: process.env.clientId || CONFIG.SLACK.CLIENT_ID,
-            clientSecret: process.env.clientSecret || CONFIG.SLACK.CLIENT_SECRET,
-            scopes: ['bot']
-        });
-
-        privateProps.set(this, {
-            controller,
-            bots: {},
-            actions: [],
-            twitchAnnouncer: new TwitchAnnouncer()
-        });
     }
 
     getActions() {
