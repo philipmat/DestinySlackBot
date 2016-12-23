@@ -7,14 +7,28 @@ let privateProps = new WeakMap();
 
 export default class Bot {
     constructor() {
-        let controller = slackbot({
-            json_file_store: './db_slackbutton_bot/',
-            interactive_replies: true
-        });
+        if (process.env.ENV && process.env.ENV === 'production') {
+            var mysqlStorage = require('botkit-storage-mysql')({
+                host:       process.env.MYSQL_HOST,
+                user:       process.env.MYSQL_USER,
+                password:   process.env.MYSQL_PASSWORD,
+                database:   'slack'
+            });
+
+            let controller = slackbot({
+                storage: mysqlStorage,
+                interactive_replies: true
+            });
+        } else {
+            let controller = slackbot({
+                json_file_store: './db_slackbutton_bot/',
+                interactive_replies: true
+            });
+        }
 
         controller.configureSlackApp({
-            clientId: CONFIG.SLACK.CLIENT_ID,
-            clientSecret: CONFIG.SLACK.CLIENT_SECRET,
+            clientId: process.env.clientId || CONFIG.SLACK.CLIENT_ID,
+            clientSecret: process.env.clientSecret || CONFIG.SLACK.CLIENT_SECRET,
             scopes: ['bot']
         });
 
@@ -95,7 +109,7 @@ function _trackBot(bot, bots) {
 function _startWebServer() {
     let controller = privateProps.get(this).controller;
 
-    controller.setupWebserver(CONFIG.PORT, (err, webserver) => {
+    controller.setupWebserver(process.env.PORT || CONFIG.PORT, (err, webserver) => {
         controller.createWebhookEndpoints(controller.webserver);
 
         controller.createOauthEndpoints(controller.webserver, (err, req, res) => {
