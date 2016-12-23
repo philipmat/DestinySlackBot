@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./src/server",
+    "start": "npm run build && node dist/app.js",
     "build": "babel src -d dist --source-maps && npm run copy",
     "build-deploy": "babel src -d dist && npm run copy",
     "copy": "cp package.json dist/package.json && cp src/app.config.json dist/app.config.json",
