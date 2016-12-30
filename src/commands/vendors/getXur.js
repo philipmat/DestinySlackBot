@@ -3,7 +3,7 @@ import util from '../../util';
 import {COMMAND_GROUPING, ADVISOR, ICON, PERSONA} from '../../constants';
 import Items from '../../DestinyItemsDefinition.json';
 
-const EXOTIC_CATEGORY = 43;
+const EXOTIC_CATEGORY = 'Exotic Gear';
 let command = ['xur'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'Return items Xur currently sells';
@@ -27,16 +27,15 @@ function getXur() {
             }, reject);
         });
     }
-    console.dir(util.destiny);
     return util.destiny.getXur();
 }
 function _processActivity(xur) {
     // TODO: what if there's no Xur?
     // console.log(xur);
-    let exoticGear = xur.saleItemCategories.find(val => val.categoryIndex === EXOTIC_CATEGORY);
+    let exoticGear = xur.saleItemCategories.find(val => val.categoryTitle === EXOTIC_CATEGORY);
     let exoticItems = exoticGear.saleItems
         .map(val => { 
-            console.log(val);
+            // console.log(val);
             return Items[val.item.itemHash].n})
         .join(", ");
     let activity = {
@@ -46,7 +45,7 @@ function _processActivity(xur) {
        image_url: ICON.XUR
     };
     let attachments = [util.destiny.helpers.basicActivityAttachment(activity)];
-    return util.slack.personaResponse('*Xur*', PERSONA.XUR, attachments);
+    return util.slack.personaResponse('Agent of The Nine', PERSONA.XUR, attachments);
 }
 export default new BotAction({
     command,
