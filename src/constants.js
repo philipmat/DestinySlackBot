@@ -28,6 +28,7 @@ const COLOR = new Enumeration({
     BANSHEE_44: '#4A4C47',
     CAYDE_6: '#4A4C47',
     LORD_SHAXX: '#4A4C47',
+    XUR: '#808080',
 
     // Misc
     ORANGE: '#F35A00',
@@ -41,7 +42,8 @@ const ICON = new Enumeration({
     CAYDE_6: 'http://bungie.net/img/destiny_content/vendor/c8db203af7a14f16a9f7f32b8f5817b8.png',
     LORD_SHAXX: 'http://bungie.net/img/destiny_content/vendor/14414f531bc248e69d5c70b7a708ccb2.png',
     TWITCH: 'https://cdn4.iconfinder.com/data/icons/simply-8-bits-12/96/twitch.png',
-    FLAWLESS_YEAR_3: 'http://bungie.net/common/destiny_content/icons/1b05977e8d0a56538c8a74ce6335ba28.jpg'
+    FLAWLESS_YEAR_3: 'http://bungie.net/common/destiny_content/icons/1b05977e8d0a56538c8a74ce6335ba28.jpg',
+    XUR: 'https://www.bungie.net/common/destiny_content/icons/f4348f6b9e0339647ef3ec0b9224eae9.png'
 });
 
 const PERSONA = new Enumeration({
@@ -49,7 +51,8 @@ const PERSONA = new Enumeration({
     BANSHEE_44: 1,
     CAYDE_6: 2,
     LORD_SHAXX: 3,
-    TWITCH: 4
+    TWITCH: 4,
+    XUR: 5
 });
 
 const BOT_NAME = new Enumeration({
@@ -57,7 +60,8 @@ const BOT_NAME = new Enumeration({
     BANSHEE_44: 'Banshee-44 [Bot]',
     CAYDE_6: 'Cayde-6 [Bot]',
     LORD_SHAXX: 'Lord Shaxx [Bot]',
-    TWITCH: 'Twitch [Bot]'
+    TWITCH: 'Twitch [Bot]',
+    XUR: 'Xur [Bot]'
 });
 
 const COMMAND_GROUPING = new Enumeration({
@@ -68,7 +72,8 @@ const COMMAND_GROUPING = new Enumeration({
     INFO: 'info',
     NONE: 'none',
     TRIALS: 'trials',
-    TWITCH: 'twitch'
+    TWITCH: 'twitch',
+    VENDORS: 'vendors'
 });
 
 const REGEX = {

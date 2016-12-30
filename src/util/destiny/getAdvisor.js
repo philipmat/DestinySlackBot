@@ -1,7 +1,6 @@
 import destiny from 'mrdandandan-destiny-api-module';
 import {ADVISOR} from '../../constants';
 
-export default { getAdvisor, getXur };
 
 function getAdvisor(advisorName) {
     return destiny.advisors.getPublicAdvisors()
@@ -48,3 +47,5 @@ function getXur() {
             return result;
         });
 }
+
+export { getAdvisor, getXur };
