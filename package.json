@@ -7,7 +7,8 @@
     "build": "babel src -d dist --source-maps && npm run copy",
     "build-deploy": "babel src -d dist && npm run copy",
     "copy": "cp package.json dist/package.json && cp src/app.config.json dist/app.config.json",
-    "lt": "lt --subdomain mrdandandanslackbotdev --port 8001"
+    "lt": "lt --subdomain mrdandandanslackbotdev --port 8001",
+    "start-dev": "babel-watch ./src/app.js --debug 5858"
   },
   "dependencies": {
     "api-request-base": "0.0.3",
@@ -21,6 +22,7 @@
     "babel": "^6.3.26",
     "babel-cli": "^6.4.5",
     "babel-core": "^6.4.5",
-    "babel-preset-es2015": "^6.3.13"
+    "babel-preset-es2015": "^6.3.13",
+    "babel-watch": "^2.0.5"
   }
 }
