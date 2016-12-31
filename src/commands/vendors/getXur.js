@@ -8,6 +8,10 @@ let command = ['xur'],
     respondsTo = ['direct_message', 'direct_mention', 'mention'],
     description = 'Return items Xur currently sells';
 
+function isEmpty(obj) {
+    return obj == null || Object.keys(obj).length === 0;
+}
+
 function action(bot, message, command) {
     return getXur()
         .then(_processActivity)
@@ -32,20 +36,32 @@ function getXur() {
 function _processActivity(xur) {
     // TODO: what if there's no Xur?
     // console.log(xur);
-    let exoticGear = xur.saleItemCategories.find(val => val.categoryTitle === EXOTIC_CATEGORY);
-    let exoticItems = exoticGear.saleItems
-        .map(val => { 
-            // console.log(val);
-            return Items[val.item.itemHash].n})
-        .join(", ");
-    let activity = {
-       activityName: 'Exotic Gear for Sale',
-       activityDescription: exoticItems,
-       thumb_url: ICON.XUR,
-       image_url: ICON.XUR
-    };
-    let attachments = [util.destiny.helpers.basicActivityAttachment(activity)];
-    return util.slack.personaResponse('Agent of The Nine', PERSONA.XUR, attachments);
+    var activities = [{
+        activityName: '',
+        activityDescription: 'Xur is not currently available.',
+        thumb_url: ICON.XUR,
+        image_url: ICON.XUR
+    }];
+    if (!isEmpty(xur) && !isEmpty(xur.saleItemCategories)) {
+        // let exoticGear = xur.saleItemCategories.find(val => val.categoryTitle === EXOTIC_CATEGORY);
+        activities = xur.saleItemCategories
+            .map(category => {
+                let exoticItems = category.saleItems
+                    .map(val => {
+                        // console.log(val);
+                        return Items[val.item.itemHash].n
+                    })
+                    .join(", ");
+                return {
+                    activityName: category.categoryTitle,
+                    activityDescription: exoticItems,
+                    thumb_url: ICON.XUR,
+                    image_url: ICON.XUR
+                };
+            });
+    }
+    let attachments = activities.map(activity => util.destiny.helpers.basicActivityAttachment(activity));
+    return util.slack.personaResponse('This week, the Agent of the Nine sells:', PERSONA.XUR, attachments);
 }
 export default new BotAction({
     command,
