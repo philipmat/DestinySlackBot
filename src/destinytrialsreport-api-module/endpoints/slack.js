@@ -8,6 +8,13 @@ const PARAMETERS = {
 };
 
 export default {
+    fireteams: new DestinyTrialsReportApiRequest({
+        path: `slack/fireteams/{${PARAMETERS.MEMBERSHIP_ID}}`,
+        routeBinding: `:${PARAMETERS.MEMBERSHIP_ID}`,
+        requiredParameters: [
+            PARAMETERS.MEMBERSHIP_ID
+        ]
+    }).buildRequest(),
     lastWeek: new DestinyTrialsReportApiRequest({
         path: `slack/lastWeek/{${PARAMETERS.GAMER_TAG}}`,
         routeBinding: `:${PARAMETERS.GAMER_TAG}`,

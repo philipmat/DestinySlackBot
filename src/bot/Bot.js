@@ -7,23 +7,50 @@ let privateProps = new WeakMap();
 
 export default class Bot {
     constructor() {
-        let controller = slackbot({
-            json_file_store: './db_slackbutton_bot/',
-            interactive_replies: true
-        });
+        if (process.env.ENV && process.env.ENV === 'production') {
+            var mysqlStorage = require('./botkit-storage-mysql')({
+                host:       process.env.MYSQL_HOST,
+                user:       process.env.MYSQL_USER,
+                password:   process.env.MYSQL_PASSWORD,
+                database:   'slack'
+            });
 
-        controller.configureSlackApp({
-            clientId: process.env.SLACK_CLIENT_ID || CONFIG.SLACK.CLIENT_ID,
-            clientSecret: process.env.SLACK_CLIENT_SECRET || CONFIG.SLACK.CLIENT_SECRET,
-            scopes: ['bot']
-        });
+            let controller = slackbot({
+                storage: mysqlStorage,
+                interactive_replies: true
+            });
 
-        privateProps.set(this, {
-            controller,
-            bots: {},
-            actions: [],
-            twitchAnnouncer: new TwitchAnnouncer()
-        });
+            controller.configureSlackApp({
+                clientId: process.env.clientId || CONFIG.SLACK.CLIENT_ID,
+                clientSecret: process.env.clientSecret || CONFIG.SLACK.CLIENT_SECRET,
+                scopes: ['bot']
+            });
+
+            privateProps.set(this, {
+                controller,
+                bots: {},
+                actions: [],
+                twitchAnnouncer: new TwitchAnnouncer()
+            });
+        } else {
+            let controller = slackbot({
+                json_file_store: './db_slackbutton_bot/',
+                interactive_replies: true
+            });
+
+            controller.configureSlackApp({
+                clientId: process.env.clientId || CONFIG.SLACK.CLIENT_ID,
+                clientSecret: process.env.clientSecret || CONFIG.SLACK.CLIENT_SECRET,
+                scopes: ['bot']
+            });
+
+            privateProps.set(this, {
+                controller,
+                bots: {},
+                actions: [],
+                twitchAnnouncer: new TwitchAnnouncer()
+            });
+        }
     }
 
     getActions() {

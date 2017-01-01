@@ -1,6 +1,7 @@
 import archnemesis from './archnemesis';
 import calloutMap from './calloutMap';
 import currentMap from './currentMap';
+import fireteams from './fireteams';
 import lastWeek from './weeklystats/lastWeek';
 import thisWeek from './weeklystats/thisWeek';
 import trialsWeek from './weeklystats/trialsWeek';
@@ -11,6 +12,7 @@ export default [
     archnemesis,
     calloutMap,
     currentMap,
+    fireteams,
     lastWeek,
     thisWeek,
     trialsWeek,
