@@ -61,7 +61,7 @@ function _processActivity(xur) {
             });
     }
     let attachments = activities.map(activity => util.destiny.helpers.basicActivityAttachment(activity));
-    return util.slack.personaResponse('This week, the Agent of the Nine sells:', PERSONA.XUR, attachments);
+    return util.slack.personaResponse('', PERSONA.XUR, attachments);
 }
 export default new BotAction({
     command,
