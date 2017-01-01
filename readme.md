@@ -1,5 +1,7 @@
 # DestinySlackBot
 
+[![Codeship Status for DestinyTrialsReport/DestinySlackBot](https://app.codeship.com/projects/3f79a3c0-a827-0134-ca81-525660f4f27b/status?branch=master)](https://app.codeship.com/projects/191284)
+
 ### Installation
 DestinySlackBot is built using `botkit` in concert with standard es2015 JavaScript.  
 `Babel` is used for transpiling
